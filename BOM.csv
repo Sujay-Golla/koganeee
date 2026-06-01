@@ -1,0 +1,22 @@
+Item Name,Qty,Price (total in USD),Item Link,Notes
+HLK-LD2450 module,2,,,24 GHz mmWave UART sensor for fixed corner nodes
+ESP32-C3 Super Mini,2,,,UART to Wi-Fi UDP bridge for each LD2450
+Short USB cable set,1,,,Power cables for fixed sensor nodes
+20x20 4-in-1 ESC + 2204 motor combo,1,,,Drone propulsion set for v1
+2S 1000-1100 mAh LiPo,2,,,One active pack plus one spare
+Propeller spare set 4-pack,1,,,Match props to final frame and motors
+XT30 pigtail + 5V BEC,1,,,Auxiliary payload power rail
+F405 or F722 20x20 FC,1,,,Commercial FC for v1 before custom board
+ESP32-S3 DevKitC-1,1,,,Companion MCU for Wi-Fi audio and display I-O
+ESP32-CAM AI-Thinker,1,,,Drone camera stream for Tier_A face pipeline
+VL53L1X ToF sensor,1,,,Optional altitude hold assist
+INMP441 I2S microphone,1,,,On-drone microphone input
+MAX98357A + 8 ohm speaker,1,,,On-drone speaker output chain
+Waveshare 1.5 inch SPI LCD 240x280,2,,,Rigid conversation UI panels
+MG90S micro servo,2,,,Panel rollout mechanism
+SPI or GH1.25 harness wire,1,,,Display and interconnect wiring
+Pogo pin pair V+ and GND,1,,,Dock charging contacts
+TP4056 charge board,1,,,Dock charging electronics
+DC barrel + 12V adapter,1,,,Skip if existing supply is already owned
+JST GH1.25 SIL wire assortment,1,,,General harness and leads
+M2 nylon standoff assortment,1,,,FC and ESC mounting stack hardware
