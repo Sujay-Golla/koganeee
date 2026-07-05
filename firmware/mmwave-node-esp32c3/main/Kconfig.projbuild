@@ -1,0 +1,35 @@
+menu "Kogane mmWave Node"
+
+    config KGN_WIFI_SSID
+        string "Wi-Fi SSID"
+        default "kogane-net"
+
+    config KGN_WIFI_PASS
+        string "Wi-Fi password"
+        default "changeme"
+
+    config KGN_BASE_IP
+        string "Base station (laptop) IP"
+        default "192.168.4.1"
+
+    config KGN_UDP_PORT
+        int "Kogane UDP port"
+        default 5005
+
+    config KGN_NODE_ID
+        int "Node id (0 or 1 for the two corners)"
+        default 0
+
+    config KGN_LD2450_UART_NUM
+        int "LD2450 UART port number"
+        default 1
+
+    config KGN_LD2450_TX
+        int "ESP32 TX GPIO -> LD2450 RX"
+        default 4
+
+    config KGN_LD2450_RX
+        int "ESP32 RX GPIO <- LD2450 TX"
+        default 5
+
+endmenu

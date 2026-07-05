@@ -1,0 +1,35 @@
+menu "Kogane Companion"
+
+    config KGN_WIFI_SSID
+        string "Wi-Fi SSID"
+        default "kogane-net"
+
+    config KGN_WIFI_PASS
+        string "Wi-Fi password"
+        default "changeme"
+
+    config KGN_BASE_IP
+        string "Base station (laptop) IP"
+        default "192.168.4.1"
+
+    config KGN_UDP_PORT
+        int "Kogane UDP port"
+        default 5005
+
+    config KGN_FC_UART_NUM
+        int "FC UART port number (UART1 on the board)"
+        default 1
+
+    config KGN_FC_UART_TX
+        int "FC UART TX GPIO"
+        default 17
+
+    config KGN_FC_UART_RX
+        int "FC UART RX GPIO"
+        default 18
+
+    config KGN_SERVO_GPIO
+        int "Servo (MG90S) LEDC GPIO"
+        default 21
+
+endmenu

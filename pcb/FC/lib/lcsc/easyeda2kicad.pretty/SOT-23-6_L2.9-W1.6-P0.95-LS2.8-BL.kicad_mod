@@ -1,0 +1,228 @@
+(footprint "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -5.149 0)
+		(layer "F.SilkS")
+		(uuid "5d897fe0-dccc-4140-8493-d44900e768a5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SOT-23-6_L2.9-W1.6-P0.95-LS2.8-BL"
+		(at 0 5.149 0)
+		(layer "F.Fab")
+		(uuid "33eb484e-a5ce-4a5a-9e21-accda72aab03")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9a356e18-5ed8-44fe-8561-ce6bfe8e7e8f")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "232edf35-18ed-4be5-b6a5-018ce671c707")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C5185863"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "09373e0e-8bda-492a-b68f-fedf008b746c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -1.54 0.89)
+		(end -1.54 -0.89)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "91e4985e-dd1f-46ed-87d4-e340cc750407")
+	)
+	(fp_line
+		(start 1.54 0.89)
+		(end 1.54 -0.89)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e0fcd5bd-adf4-4982-a0b5-a2c03277ae0c")
+	)
+	(fp_circle
+		(center -1.67 1.3)
+		(end -1.52 1.3)
+		(stroke
+			(width 0.3)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "982bcbef-90e1-40fa-96f6-2d122c03422c")
+	)
+	(fp_circle
+		(center -1.46 1.4)
+		(end -1.43 1.4)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "7d11d757-beee-48dc-aab5-d2245c9a3b82")
+	)
+	(fp_circle
+		(center -0.92 1.68)
+		(end -0.82 1.68)
+		(stroke
+			(width 0.2)
+			(type solid)
+		)
+		(fill no)
+		(layer "Cmts.User")
+		(uuid "12d156eb-5c9f-4beb-b9d2-620b66f0e42f")
+	)
+	(fp_line
+		(start -1.46 -0.81)
+		(end 1.46 -0.81)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "40a2c5dd-65b3-4dbe-8c2b-ad7078fa543f")
+	)
+	(fp_line
+		(start -1.46 0.81)
+		(end -1.46 -0.81)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "02283a56-76f3-41f2-8efe-5b44dcf79320")
+	)
+	(fp_line
+		(start 1.46 -0.81)
+		(end 1.46 0.81)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "d9a72397-e5bc-4116-b630-978fd0530cf9")
+	)
+	(fp_line
+		(start 1.46 0.81)
+		(end -1.46 0.81)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "9a5b2ab5-45ab-4174-abae-46df56d52a7d")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "43a1c665-0ca0-4776-8fa3-8442024c5a39")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -0.95 1.15)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "318c43eb-2004-40fa-a17a-f3f3610c94a1")
+	)
+	(pad "2" smd rect
+		(at 0 1.15)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "a091cf05-9836-4947-bbe5-577295059846")
+	)
+	(pad "3" smd rect
+		(at 0.95 1.15)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "044bc586-2658-4e3a-a8ca-389464536d72")
+	)
+	(pad "4" smd rect
+		(at 0.95 -1.15)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "3cef397d-df56-47c2-9de6-f1c17b98f631")
+	)
+	(pad "5" smd rect
+		(at 0 -1.15)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9de1569f-69d0-4ec8-af44-60ac873aea7a")
+	)
+	(pad "6" smd rect
+		(at -0.95 -1.15)
+		(size 0.532 1.072)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9b02c62e-637c-4ba1-b6cc-ce5f7777a692")
+	)
+	(embedded_fonts no)
+	(model "hardware/fc/lib/lcsc/easyeda2kicad.3dshapes/SOT-23-6_L2.9-W1.6-H1.5-LS2.8-P0.95.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 270)
+		)
+	)
+	(model "C:/Users/sujay/Downloads/ul_LMR51430XDDCR/DDC0006A.stp"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -90)
+		)
+	)
+)

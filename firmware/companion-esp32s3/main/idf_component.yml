@@ -1,0 +1,5 @@
+## ESP-IDF managed components for the Kogane companion.
+## OV2640 camera driver is optional at first bring-up; uncomment to enable camera_dvp.
+dependencies:
+  idf: ">=5.0"
+  # espressif/esp32-camera: "^2.0.0"   # TODO(kogane): enable for OV2640 MJPEG stream

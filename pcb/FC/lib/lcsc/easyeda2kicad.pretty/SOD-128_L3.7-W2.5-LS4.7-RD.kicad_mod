@@ -1,0 +1,237 @@
+(footprint "SOD-128_L3.7-W2.5-LS4.7-RD"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -4 0)
+		(layer "F.SilkS")
+		(uuid "b1f58c6d-fcb7-452c-a0db-66c833dff8df")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SOD-128_L3.7-W2.5-LS4.7-RD"
+		(at 0 4 0)
+		(layer "F.Fab")
+		(uuid "85e71c91-f862-4525-80b0-76f16e0c02db")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fdceb846-adc9-4e2d-9fae-96502dbdd6c2")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "8a4af944-ecb8-4543-badf-114c8c7d9a14")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C3758383"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "1aa27fbc-bdde-49c7-857c-2d73519667a5")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr through_hole)
+	(fp_line
+		(start -1.98 -1.3)
+		(end 1.98 -1.3)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "af76116a-aa9b-4554-b009-463803e5a800")
+	)
+	(fp_line
+		(start -1.98 1.3)
+		(end 1.98 1.3)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "9c76d227-71e7-4f75-bba8-8a7c88c70684")
+	)
+	(fp_line
+		(start -1.47 -1.3)
+		(end -1.47 1.3)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3527782e-e38b-4a54-bf1c-d5ce6ebb3caa")
+	)
+	(fp_line
+		(start 1.98 -1.3)
+		(end 1.98 -1.11)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "e20b70cd-6119-40fd-b1bb-cfc05cf37b57")
+	)
+	(fp_line
+		(start 1.98 1.3)
+		(end 1.98 1.11)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "8880c8bf-e00b-469a-b4b5-a4c9d51577dd")
+	)
+	(fp_circle
+		(center -2.35 1.23)
+		(end -2.32 1.23)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "fcf693e0-591d-40d4-bf02-47da5b922686")
+	)
+	(fp_poly
+		(pts
+			(xy -1.899996 -1.377391) (xy -1.899996 -0.999998) (xy -2.204796 -0.999998) (xy -2.204796 -1.377391)
+			(xy -1.899996 -1.377391)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "ffe4b614-dc2c-41d8-bd9c-19d1c315175a")
+	)
+	(fp_poly
+		(pts
+			(xy -1.899996 1.377391) (xy -1.899996 0.999998) (xy -2.204796 0.999998) (xy -2.204796 1.377391) (xy -1.899996 1.377391)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "849069c6-5519-475b-9d81-07438535f2c4")
+	)
+	(fp_line
+		(start -1.9 -1.22)
+		(end 1.9 -1.22)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "79c5a578-b6cb-4e1c-87d4-9d49eeb642fa")
+	)
+	(fp_line
+		(start -1.9 1.22)
+		(end -1.9 -1.22)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "662f20f4-f7a6-4176-b7fb-cc56d26f0663")
+	)
+	(fp_line
+		(start 1.9 -1.22)
+		(end 1.9 1.22)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "45ccaded-ca48-45a4-832a-d74718f14cc5")
+	)
+	(fp_line
+		(start 1.9 1.22)
+		(end -1.9 1.22)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "c50e3f86-c7bc-457f-8d75-7130747cf121")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "7b878b92-1af5-4f32-a98a-98612647992b")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -2.2 0 180)
+		(size 1.25 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "2dc2437e-83eb-482c-bbe4-663d8b03214a")
+	)
+	(pad "2" smd rect
+		(at 2.2 0 180)
+		(size 1.25 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "3278492b-76f6-4795-bba3-a9955e5ad743")
+	)
+	(embedded_fonts no)
+	(model "hardware/fc/lib/lcsc/easyeda2kicad.3dshapes/SOD-128_L3.7-W2.5-LS4.7-RD-1.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+	(model "C:/Users/sujay/Downloads/ul_RB088LAM-30TFTR/DIO_RB050LAM_ROM.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -0 -0 -180)
+		)
+	)
+)

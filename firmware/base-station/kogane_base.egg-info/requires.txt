@@ -1,0 +1,9 @@
+numpy>=1.26
+
+[vision]
+opencv-python>=4.8
+ultralytics>=8.1
+
+[voice]
+openwakeword
+silero-vad

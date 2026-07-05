@@ -1,0 +1,12 @@
+Metadata-Version: 2.4
+Name: kogane-base
+Version: 0.1.0
+Summary: Kogane base-station: sensor fusion, voice pipeline, setpoint sender, screen renderer
+Requires-Python: >=3.11
+Requires-Dist: numpy>=1.26
+Provides-Extra: voice
+Requires-Dist: openwakeword; extra == "voice"
+Requires-Dist: silero-vad; extra == "voice"
+Provides-Extra: vision
+Requires-Dist: opencv-python>=4.8; extra == "vision"
+Requires-Dist: ultralytics>=8.1; extra == "vision"

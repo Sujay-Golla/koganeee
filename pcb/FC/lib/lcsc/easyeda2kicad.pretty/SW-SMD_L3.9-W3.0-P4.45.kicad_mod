@@ -1,0 +1,233 @@
+(footprint "SW-SMD_L3.9-W3.0-P4.45"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -4 0)
+		(layer "F.SilkS")
+		(uuid "cd3fadce-e481-4e79-8637-00b011d4f0a5")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SW-SMD_L3.9-W3.0-P4.45"
+		(at 0 4 0)
+		(layer "F.Fab")
+		(uuid "a4f76337-8e5d-42a9-b47c-30f7a84cf7ea")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "eed8fa7e-7298-48c9-b6c0-dacc0dfaef80")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "9963a147-839e-4c52-af42-0ec0d73c157e")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C720477"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "aff674e0-5f3a-43ad-87b3-fe2f23fa692c")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2.03 -1.54)
+		(end -2.03 -1.11)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "24380c17-ee06-4233-bd8c-2bf6590b0de3")
+	)
+	(fp_line
+		(start -2.03 1.54)
+		(end -2.03 1.11)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "a6a1178f-90c7-42da-8ab1-41906420e3f7")
+	)
+	(fp_line
+		(start 2.03 -1.54)
+		(end -2.03 -1.54)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "ab9478fe-b82f-41b4-a819-377a3088b64c")
+	)
+	(fp_line
+		(start 2.03 -1.54)
+		(end 2.03 -1.11)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "3e7dcf78-4cdd-4c8a-b153-7b9296e8938b")
+	)
+	(fp_line
+		(start 2.03 1.11)
+		(end 2.03 1.54)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "bc35230d-48ea-4da6-8cf1-1a4b88dd9f97")
+	)
+	(fp_line
+		(start 2.03 1.54)
+		(end -2.03 1.54)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "85aa2f12-0c67-40a1-b126-23edd3a68dea")
+	)
+	(fp_circle
+		(center 0 0)
+		(end 0.9 0)
+		(stroke
+			(width 0.25)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "8aab31c7-5fa3-49c4-8c00-af8a3f59c2b8")
+	)
+	(fp_circle
+		(center 2.5 -1.47)
+		(end 2.53 -1.47)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "6c900db2-7ab6-4282-8782-5689944214dc")
+	)
+	(fp_line
+		(start -1.95 -1.46)
+		(end 1.95 -1.46)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "27b76c85-b3ac-4620-b9a2-c4c2c4429f62")
+	)
+	(fp_line
+		(start -1.95 1.46)
+		(end -1.95 -1.46)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "787a3006-3060-4b08-bf87-a4c08972bf57")
+	)
+	(fp_line
+		(start 1.95 -1.46)
+		(end 1.95 1.46)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "e1b0a6b7-d133-4aa4-95e2-c859be58df4c")
+	)
+	(fp_line
+		(start 1.95 1.46)
+		(end -1.95 1.46)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "333c0b28-e13b-4de6-97c2-1427ce8a142d")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "f3d0183d-b30b-4ae8-ae3e-c2c1742c8cac")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -2.18 0)
+		(size 1.23 1.86)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "73a97f8a-fa74-43f3-80b0-e8254b024c20")
+	)
+	(pad "2" smd rect
+		(at 2.18 0)
+		(size 1.23 1.86)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "41903ba7-4fa5-4245-90a7-b1070745be6d")
+	)
+	(embedded_fonts no)
+	(model "hardware/fc/lib/lcsc/easyeda2kicad.3dshapes/SW-SMD_L3.9-W2.9-H2.0-LS4.8.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+	(model "C:/Users/sujay/Downloads/3x4x2mm-tactile-button-1.snapshot.4/3x4x2 tact button.step"
+		(offset
+			(xyz -2.5 0.7 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz -90 -0 -0)
+		)
+	)
+)

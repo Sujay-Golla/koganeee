@@ -1,0 +1,361 @@
+ERC report (2026-06-22T19:19:40-0400, Encoding UTF8)
+
+***** Sheet /
+[lib_symbol_mismatch]: Symbol 'BSMD2920L-1000-16V' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(85.09 mm, 55.88 mm): Symbol F1 [BSMD2920L-1000-16V]
+[lib_symbol_mismatch]: Symbol 'SMAJ18A_C148219' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(102.87 mm, 66.04 mm): Symbol D4 [SMAJ18A_C148219]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(110.49 mm, 55.88 mm): Symbol #PWR025 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+5V' doesn't match copy in library 'power'
+    ; warning
+    @(85.09 mm, 91.44 mm): Symbol #PWR021 [+5V]
+[lib_symbol_mismatch]: Symbol 'DMG3415U' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(82.55 mm, 97.79 mm): Symbol Q1 [DMG3415U]
+[lib_symbol_mismatch]: Symbol 'RB088LAM-40TR' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(76.20 mm, 102.87 mm): Symbol D1 [RB088LAM-40TR]
+[lib_symbol_mismatch]: Symbol 'XC6206P332MR' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(113.03 mm, 102.87 mm): Symbol U9 [XC6206P332MR]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(93.98 mm, 130.81 mm): Symbol #PWR081 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(132.08 mm, 97.79 mm): Symbol #PWR022 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'XC6206-2.8V' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(116.84 mm, 128.27 mm): Symbol U8 [XC6206-2.8V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(95.25 mm, 154.94 mm): Symbol #PWR082 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'XC6206-1.2V_C49446790' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(115.57 mm, 154.94 mm): Symbol U10 [XC6206-1.2V_C49446790]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(147.32 mm, 125.73 mm): Symbol #PWR049 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(146.05 mm, 149.86 mm): Symbol #PWR053 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'RB088LAM-40TR' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(189.23 mm, 107.95 mm): Symbol D2 [RB088LAM-40TR]
+[lib_symbol_mismatch]: Symbol 'DMG3415U' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(198.12 mm, 100.33 mm): Symbol Q2 [DMG3415U]
+[lib_symbol_mismatch]: Symbol 'LMR51430XDDCR' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(215.90 mm, 57.15 mm): Symbol U7 [LMR51430XDDCR]
+[lib_symbol_mismatch]: Symbol 'LMR51430XDDCR' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(228.60 mm, 111.76 mm): Symbol U6 [LMR51430XDDCR]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(261.62 mm, 57.15 mm): Symbol #PWR017 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(274.32 mm, 111.76 mm): Symbol #PWR03 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+BATT' doesn't match copy in library 'power'
+    ; warning
+    @(43.18 mm, 29.21 mm): Symbol #PWR036 [+BATT]
+[lib_symbol_mismatch]: Symbol 'Conn_01x08' doesn't match copy in library 'Connector_Generic'
+    ; warning
+    @(49.53 mm, 36.83 mm): Symbol J1 [Conn_01x08]
+[lib_symbol_mismatch]: Symbol '+5V' doesn't match copy in library 'power'
+    ; warning
+    @(46.99 mm, 66.04 mm): Symbol #PWR054 [+5V]
+[lib_symbol_mismatch]: Symbol 'Conn_01x03' doesn't match copy in library 'Connector_Generic'
+    ; warning
+    @(52.07 mm, 66.04 mm): Symbol J5 [Conn_01x03]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(78.74 mm, 33.02 mm): Symbol #PWR038 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'Conn_01x03' doesn't match copy in library 'Connector_Generic'
+    ; warning
+    @(100.33 mm, 33.02 mm): Symbol J2 [Conn_01x03]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(82.55 mm, 71.12 mm): Symbol #PWR043 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'Conn_01x03' doesn't match copy in library 'Connector_Generic'
+    ; warning
+    @(100.33 mm, 46.99 mm): Symbol J3 [Conn_01x03]
+[lib_symbol_mismatch]: Symbol 'Conn_01x14' doesn't match copy in library 'Connector_Generic'
+    ; warning
+    @(53.34 mm, 100.33 mm): Symbol J4 [Conn_01x14]
+[lib_symbol_mismatch]: Symbol '+1V2' doesn't match copy in library 'power'
+    ; warning
+    @(85.09 mm, 86.36 mm): Symbol #PWR044 [+1V2]
+[global_label_dangling]: Global label not connected anywhere else in the schematic
+    ; warning
+    @(92.71 mm, 78.74 mm): Global Label 'VS'
+[lib_symbol_mismatch]: Symbol '+2V8' doesn't match copy in library 'power'
+    ; warning
+    @(83.82 mm, 88.90 mm): Symbol #PWR045 [+2V8]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(48.26 mm, 118.11 mm): Vertical Wire, length 1.27 mm
+[lib_symbol_mismatch]: Symbol '+5V' doesn't match copy in library 'power'
+    ; warning
+    @(44.45 mm, 120.65 mm): Symbol #PWR041 [+5V]
+[lib_symbol_mismatch]: Symbol '0510-GX-24PWB-GF-RB' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(102.87 mm, 92.71 mm): Symbol FPC1 [0510-GX-24PWB-GF-RB]
+[lib_symbol_mismatch]: Symbol '+5V' doesn't match copy in library 'power'
+    ; warning
+    @(49.53 mm, 162.56 mm): Symbol #PWR073 [+5V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(185.42 mm, 43.18 mm): Symbol #PWR059 [+3.3V]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(185.42 mm, 45.72 mm): Vertical Wire, length 1.27 mm
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(54.61 mm, 74.93 mm): Symbol #PWR066 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(120.65 mm, 30.48 mm): Symbol #PWR063 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(172.72 mm, 48.26 mm): Symbol #PWR077 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(40.64 mm, 31.75 mm): Symbol #PWR010 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'TF-01A' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(78.74 mm, 53.34 mm): Symbol Card1 [TF-01A]
+[lib_symbol_mismatch]: Symbol 'USBLC6-2SC6' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(40.64 mm, 102.87 mm): Symbol D6 [USBLC6-2SC6]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(97.79 mm, 55.88 mm): Symbol #PWR09 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'TYPE-C16PIN2MD' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(101.60 mm, 106.68 mm): Symbol USB1 [TYPE-C16PIN2MD]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(152.40 mm, 22.86 mm): Symbol #PWR011 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(93.98 mm, 142.24 mm): Symbol #PWR07 [+3.3V]
+[lib_symbol_mismatch]: Symbol 'FCM1608KF-601T03' doesn't match copy in library 'easyeda2kicad'
+    ; warning
+    @(173.99 mm, 25.40 mm): Symbol L3 [FCM1608KF-601T03]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(114.30 mm, 149.86 mm): Horizontal Wire, length 2.54 mm
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(114.30 mm, 152.40 mm): Horizontal Wire, length 2.54 mm
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(153.67 mm, 126.931 mm): Vertical Wire, length 2.471 mm
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(153.67 mm, 127.00 mm): Vertical Wire, length 0.069 mm
+[endpoint_off_grid]: Symbol pin or wire end off connection grid
+    ; warning
+    @(153.67 mm, 126.931 mm): Symbol #PWR064 Pin 1 [Power input, Line]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(153.67 mm, 127.00 mm): Vertical Wire, length 0.069 mm
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(215.90 mm, 22.86 mm): Symbol #PWR012 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(214.63 mm, 40.64 mm): Symbol #PWR013 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(224.79 mm, 69.85 mm): Symbol #PWR079 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(250.19 mm, 49.53 mm): Symbol #PWR014 [+3.3V]
+[unconnected_wire_endpoint]: Unconnected wire endpoint
+    ; warning
+    @(252.73 mm, 49.53 mm): Horizontal Wire, length 5.08 mm
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(217.17 mm, 152.40 mm): Symbol #PWR08 [+3.3V]
+[lib_symbol_mismatch]: Symbol '+3.3V' doesn't match copy in library 'power'
+    ; warning
+    @(262.89 mm, 74.93 mm): Symbol #PWR015 [+3.3V]
+
+***** Sheet /Power/
+[pin_not_connected]: Pin not connected
+    ; error
+    @(30.48 mm, 186.69 mm): Symbol #PWR080 Pin 1 [Power input, Line]
+
+***** Sheet /Connectors/
+[pin_not_connected]: Pin not connected
+    ; error
+    @(48.26 mm, 118.11 mm): Symbol J4 Pin 14 [Pin_14, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(99.06 mm, 86.36 mm): Symbol FPC1 Pin 10 [10, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(99.06 mm, 88.90 mm): Symbol FPC1 Pin 11 [11, Passive, Line]
+[pin_not_connected]: Pin not connected
+    ; error
+    @(185.42 mm, 45.72 mm): Symbol R21 Pin 1 [Passive, Line]
+[multiple_net_names]: Both AGND and GND are attached to the same items; AGND will be used in the netlist
+    ; warning
+    @(76.20 mm, 66.04 mm): Symbol #PWR042 Pin 1 [Power input, Line]
+    @(31.75 mm, 66.04 mm): Symbol #PWR055 Pin 1 [Power input, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 68.58 mm): Symbol FPC1 Pin 3 [3, Unspecified, Line]
+    @(110.49 mm, 78.74 mm): Symbol U4 Pin 24 [IO47, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(106.68 mm, 58.42 mm): Symbol FPC1 Pin 26 [26, Unspecified, Line]
+    @(99.06 mm, 66.04 mm): Symbol FPC1 Pin 2 [2, Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 73.66 mm): Symbol FPC1 Pin 5 [5, Unspecified, Line]
+    @(110.49 mm, 81.28 mm): Symbol U4 Pin 25 [IO48, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(99.06 mm, 76.20 mm): Symbol FPC1 Pin 6 [6, Unspecified, Line]
+    @(48.26 mm, 110.49 mm): Symbol J4 Pin 11 [Pin_11, Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 81.28 mm): Symbol FPC1 Pin 8 [8, Unspecified, Line]
+    @(110.49 mm, 76.20 mm): Symbol U4 Pin 16 [IO46, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 83.82 mm): Symbol FPC1 Pin 9 [9, Unspecified, Line]
+    @(140.97 mm, 76.20 mm): Symbol U4 Pin 22 [IO14, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 91.44 mm): Symbol FPC1 Pin 12 [12, Unspecified, Line]
+    @(140.97 mm, 45.72 mm): Symbol U4 Pin 38 [IO2, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 93.98 mm): Symbol FPC1 Pin 13 [13, Unspecified, Line]
+    @(110.49 mm, 50.80 mm): Symbol U4 Pin 23 [IO21, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 96.52 mm): Symbol FPC1 Pin 14 [14, Unspecified, Line]
+    @(140.97 mm, 43.18 mm): Symbol U4 Pin 39 [IO1, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 101.60 mm): Symbol FPC1 Pin 16 [16, Unspecified, Line]
+    @(110.49 mm, 43.18 mm): Symbol U4 Pin 11 [IO18, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 104.14 mm): Symbol FPC1 Pin 17 [17, Unspecified, Line]
+    @(140.97 mm, 73.66 mm): Symbol U4 Pin 21 [IO13, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 106.68 mm): Symbol FPC1 Pin 18 [18, Unspecified, Line]
+    @(110.49 mm, 40.64 mm): Symbol U4 Pin 10 [IO17, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 109.22 mm): Symbol FPC1 Pin 19 [19, Unspecified, Line]
+    @(140.97 mm, 55.88 mm): Symbol U4 Pin 6 [IO6, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 111.76 mm): Symbol FPC1 Pin 20 [20, Unspecified, Line]
+    @(140.97 mm, 81.28 mm): Symbol U4 Pin 9 [IO16, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 114.30 mm): Symbol FPC1 Pin 21 [21, Unspecified, Line]
+    @(140.97 mm, 58.42 mm): Symbol U4 Pin 7 [IO7, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 116.84 mm): Symbol FPC1 Pin 22 [22, Unspecified, Line]
+    @(140.97 mm, 78.74 mm): Symbol U4 Pin 8 [IO15, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 119.38 mm): Symbol FPC1 Pin 23 [23, Unspecified, Line]
+    @(140.97 mm, 53.34 mm): Symbol U4 Pin 5 [IO5, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(99.06 mm, 121.92 mm): Symbol FPC1 Pin 24 [24, Unspecified, Line]
+    @(140.97 mm, 50.80 mm): Symbol U4 Pin 4 [IO4, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Power input are connected
+    ; warning
+    @(106.68 mm, 127.00 mm): Symbol FPC1 Pin 25 [25, Unspecified, Line]
+    @(111.76 mm, 127.00 mm): Symbol #PWR047 Pin 1 [Power input, Line]
+
+***** Sheet /Basics/
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(35.56 mm, 140.97 mm): Symbol X1 Pin 4 [GND, Unspecified, Line]
+    @(33.02 mm, 153.67 mm): Symbol C23 Pin 2 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(50.80 mm, 140.97 mm): Symbol X1 Pin 3 [OSC2, Unspecified, Line]
+    @(55.88 mm, 140.97 mm): Symbol C24 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(35.56 mm, 146.05 mm): Symbol X1 Pin 1 [OSC1, Unspecified, Line]
+    @(33.02 mm, 146.05 mm): Symbol C23 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(50.80 mm, 146.05 mm): Symbol X1 Pin 2 [GND, Unspecified, Line]
+    @(55.88 mm, 148.59 mm): Symbol C24 Pin 2 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(36.83 mm, 175.26 mm): Symbol X2 Pin 1 [1, Unspecified, Line]
+    @(35.56 mm, 175.26 mm): Symbol C21 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(46.99 mm, 175.26 mm): Symbol X2 Pin 2 [2, Unspecified, Line]
+    @(48.26 mm, 175.26 mm): Symbol C22 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(111.76 mm, 147.32 mm): Symbol U2 Pin 4 [INT1/INT, Unspecified, Line]
+    @(132.08 mm, 67.31 mm): Symbol U1 Pin 24 [PC4, Bidirectional, Line]
+[pin_to_pin]: Pins of type Bidirectional and Power output are connected
+    ; warning
+    @(172.72 mm, 85.09 mm): Symbol U1 Pin 55 [PB3, Bidirectional, Line]
+    @(97.79 mm, 55.88 mm): Symbol #PWR09 Pin 1 [Power output, Line]
+[pin_to_pin]: Pins of type Unspecified and Power input are connected
+    ; warning
+    @(250.19 mm, 29.21 mm): Symbol SW1 Pin 1 [1, Unspecified, Line]
+    @(250.19 mm, 33.02 mm): Symbol #PWR068 Pin 1 [Power input, Line]
+[pin_to_pin]: Pins of type Unspecified and Power output are connected
+    ; warning
+    @(252.73 mm, 49.53 mm): Symbol SW2 Pin 1 [1, Unspecified, Line]
+    @(250.19 mm, 49.53 mm): Symbol #PWR014 Pin 1 [Power output, Line]
+[pin_to_pin]: Pins of type Unspecified and Bidirectional are connected
+    ; warning
+    @(210.82 mm, 152.40 mm): Symbol U2 Pin 9 [INT2/FSYNC/CLKIN, Unspecified, Line]
+    @(172.72 mm, 77.47 mm): Symbol U1 Pin 25 [PB0, Bidirectional, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(265.43 mm, 29.21 mm): Symbol SW1 Pin 2 [2, Unspecified, Line]
+    @(261.62 mm, 33.02 mm): Symbol C25 Pin 1 [Passive, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(267.97 mm, 49.53 mm): Symbol SW2 Pin 2 [2, Unspecified, Line]
+    @(273.05 mm, 49.53 mm): Symbol R18 Pin 1 [Passive, Line]
+
+***** Sheet /ESP32/
+[pin_not_connected]: Pin not connected
+    ; error
+    @(175.26 mm, 48.26 mm): Symbol SW3 Pin 1 [1, Unspecified, Line]
+[pin_to_pin]: Pins of type Unspecified and Power input are connected
+    ; warning
+    @(57.15 mm, 44.45 mm): Symbol U11 Pin 17 [PAD, Unspecified, Line]
+    @(52.07 mm, 44.45 mm): Symbol U11 Pin 3 [GND, Power input, Line]
+[pin_to_pin]: Pins of type Unspecified and Power output are connected
+    ; warning
+    @(175.26 mm, 48.26 mm): Symbol SW3 Pin 1 [1, Unspecified, Line]
+    @(172.72 mm, 48.26 mm): Symbol #PWR077 Pin 1 [Power output, Line]
+[pin_to_pin]: Pins of type Unspecified and Passive are connected
+    ; warning
+    @(190.50 mm, 48.26 mm): Symbol SW3 Pin 2 [2, Unspecified, Line]
+    @(195.58 mm, 48.26 mm): Symbol R22 Pin 1 [Passive, Line]
+
+ ** ERC messages: 104  Errors 6  Warnings 98

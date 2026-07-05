@@ -1,0 +1,237 @@
+(footprint "SMA_L4.4-W2.6-LS5.0-RD"
+	(version 20241229)
+	(generator "pcbnew")
+	(generator_version "9.0")
+	(layer "F.Cu")
+	(property "Reference" "REF**"
+		(at 0 -4 0)
+		(layer "F.SilkS")
+		(uuid "90227522-3cd3-46ee-8f38-9f1f1edb7d45")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Value" "SMA_L4.4-W2.6-LS5.0-RD"
+		(at 0 4 0)
+		(layer "F.Fab")
+		(uuid "da2a4415-f715-4d5b-9e70-5a3052ceff03")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Datasheet" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "0cf7f6d8-9be0-453f-b097-876e4e1690a3")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "Description" ""
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "61b926c5-f9f7-4c4f-90f7-b5bd33934f54")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(property "LCSC Part" "C148219"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(hide yes)
+		(uuid "fd1e101c-2cc6-43fc-9123-8cb89334c5cc")
+		(effects
+			(font
+				(size 1.27 1.27)
+				(thickness 0.15)
+			)
+		)
+	)
+	(attr smd)
+	(fp_line
+		(start -2.73 -1.4)
+		(end 2.73 -1.4)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "da874856-13d6-4831-96a1-0eb8073d7404")
+	)
+	(fp_line
+		(start -2.73 1.4)
+		(end 2.73 1.4)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "652f0587-f284-491b-b465-e2fbf5e825a0")
+	)
+	(fp_line
+		(start -1.2 -1.4)
+		(end -1.2 1.4)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "81fb29cf-60ef-4e7b-b37c-00721f363839")
+	)
+	(fp_line
+		(start 2.73 -1.4)
+		(end 2.73 -1)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "0dc426a0-2700-40b4-abec-6555a3f38151")
+	)
+	(fp_line
+		(start 2.73 1.4)
+		(end 2.73 1)
+		(stroke
+			(width 0.15)
+			(type solid)
+		)
+		(layer "F.SilkS")
+		(uuid "da6d7875-6223-40b0-a9ca-202edd2dccb8")
+	)
+	(fp_circle
+		(center -2.55 1.25)
+		(end -2.52 1.25)
+		(stroke
+			(width 0.06)
+			(type solid)
+		)
+		(fill no)
+		(layer "F.SilkS")
+		(uuid "de9eb9e4-12f9-489c-8a04-b71a93e138ca")
+	)
+	(fp_poly
+		(pts
+			(xy -2.650007 -1.477391) (xy -2.650007 -0.948893) (xy -3.107207 -0.948893) (xy -3.107207 -1.477391)
+			(xy -2.650007 -1.477391)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "046b0924-3eb0-4f0e-a046-3217d02f5f82")
+	)
+	(fp_poly
+		(pts
+			(xy -2.650007 1.477391) (xy -2.650007 0.948893) (xy -3.107207 0.948893) (xy -3.107207 1.477391) (xy -2.650007 1.477391)
+		)
+		(stroke
+			(width 0)
+			(type solid)
+		)
+		(fill yes)
+		(layer "F.SilkS")
+		(uuid "fe5563c0-f8a2-4073-bbc2-61255a8c6b44")
+	)
+	(fp_line
+		(start -2.15 -1.25)
+		(end 2.15 -1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "6171e63c-34f4-4306-b0b1-9eef60a36c46")
+	)
+	(fp_line
+		(start -2.15 1.25)
+		(end -2.15 -1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "79bddedf-6240-43c9-a0ce-2171bde80aa7")
+	)
+	(fp_line
+		(start 2.15 -1.25)
+		(end 2.15 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "ad3bd2f2-38b5-49f9-b871-6a2dca3d6385")
+	)
+	(fp_line
+		(start 2.15 1.25)
+		(end -2.15 1.25)
+		(stroke
+			(width 0.05)
+			(type solid)
+		)
+		(layer "F.CrtYd")
+		(uuid "7017dd13-e1b7-439d-bae2-9026d25b1a1c")
+	)
+	(fp_text user "${REFERENCE}"
+		(at 0 0 0)
+		(layer "F.Fab")
+		(uuid "32a3d934-18ea-4352-a784-dfcd0b3cfa15")
+		(effects
+			(font
+				(size 1 1)
+				(thickness 0.15)
+			)
+		)
+	)
+	(pad "1" smd rect
+		(at -2.19 0)
+		(size 1.8 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "9505d547-596b-4767-9e42-8725094c4074")
+	)
+	(pad "2" smd rect
+		(at 2.19 0)
+		(size 1.8 1.7)
+		(layers "F.Cu" "F.Mask" "F.Paste")
+		(uuid "267d4e3d-0977-4850-aa3d-8fad4887512b")
+	)
+	(embedded_fonts no)
+	(model "hardware/fc/lib/lcsc/easyeda2kicad.3dshapes/SMA_L4.4-W2.6-LS5.0-RD.wrl"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+	(model "C:/Users/sujay/Downloads/ul_SMAJ18A/SMASeries_LTF.step"
+		(offset
+			(xyz 0 0 0)
+		)
+		(scale
+			(xyz 1 1 1)
+		)
+		(rotate
+			(xyz 0 0 0)
+		)
+	)
+)

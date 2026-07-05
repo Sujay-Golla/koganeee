@@ -1,0 +1,87 @@
+# KOGANE FC — iNAV CLI config (paste into the iNAV Configurator CLI, then `save`)
+#
+# Baseline config for the custom STM32F722 board. Pins per hardware/DESIGN.md §5.
+# Lines are order-independent iNAV CLI commands. Review every TODO before flying.
+# Generated as a hand-written baseline, not dumped from a live FC.
+
+# ---- resources: repoint to Kogane pins (only needed on a generic stock target) ----
+# Motors (DShot on TIM2 CH1-4)
+resource MOTOR 1 A00
+resource MOTOR 2 A01
+resource MOTOR 3 A02
+resource MOTOR 4 A03
+
+# Gyro SPI1 (ICM-45686)
+resource SPI_SCK 1 A05
+resource SPI_MISO 1 A06
+resource SPI_MOSI 1 A07
+resource GYRO_CS 1 A04
+resource GYRO_EXTI 1 C04      # ICM INT1
+# INT2 (B00) optional / second data-ready
+
+# I2C1 (VL53L1X + optional baro)
+resource I2C_SCL 1 B06
+resource I2C_SDA 1 B07
+
+# UARTs
+resource SERIAL_TX 1 A09       # ESP32 (MSP + MAVLink telem)
+resource SERIAL_RX 1 A10
+resource SERIAL_TX 3 B10       # ELRS/CRSF RX
+resource SERIAL_RX 3 B11
+resource SERIAL_TX 6 C06       # spare (ESC telem / GPS / VTX)
+resource SERIAL_RX 6 C07
+
+# Status LED / beeper
+resource LED 1 B09
+# resource BEEPER 1 B08        # TODO(kogane): confirm beeper pin (ioc uses B08 for VL-XSHUT)
+
+# ADC
+resource ADC_BATT 1 C01        # TODO(kogane): DESIGN.md uses PC0; ioc uses PC1 — pick one and match hardware
+
+# ---- IMU ----
+set imu_hardware = ICM45686    # TODO(kogane): confirm exact iNAV enum name in your 9.x build
+set gyro_to_use = FIRST
+set align_gyro = DEFAULT       # TODO(kogane): set per ICM-45686 orientation on the PCB
+
+# ---- ports / protocols ----
+# UART1: MSP (also carries MAVLink telemetry out)
+serial 0 1 115200 115200 0 115200
+# UART3: serial RX (CRSF)
+serial 2 64 115200 115200 0 115200
+set receiver_type = SERIAL
+set serialrx_provider = CRSF
+
+# MAVLink telemetry on UART1 (shares port with MSP; enable telemetry output)
+set telemetry_switch = OFF     # TODO(kogane): configure MAVLink telem output as desired
+
+# ---- MSP override (off-board setpoints from ESP32) ----
+# TODO(kogane): enable MSP RC override so the companion can inject vx/vy/vz/yaw as RC.
+# feature RX_MSP  / or use msp_override_channels per iNAV version.
+
+# ---- motors / mixer ----
+set motor_pwm_protocol = DSHOT300
+set motor_direction_inverted = OFF
+# TODO(kogane): after DShot DMA check, confirm motor order/direction with props OFF.
+
+# ---- altitude ----
+set rangefinder_hardware = VL53L1X
+# TODO(kogane): optional baro (DPS310/BMP388) on I2C1.
+
+# ---- battery ----
+feature VBAT
+set vbat_scale = 1100          # TODO(kogane): calibrate against a known pack voltage
+set vbat_max_cell_voltage = 420
+set vbat_min_cell_voltage = 330
+set battery_cells = 4
+
+# ---- blackbox ----
+feature BLACKBOX
+set blackbox_device = SDCARD
+set sdcard_mode = SDIO
+
+# ---- failsafe (bring-up safety) ----
+set failsafe_procedure = LAND
+# TODO(kogane): define UDP/Wi-Fi link-loss behavior too — the ESP32 must signal link state
+#               and drop to RC / land if the off-board loop dies (DESIGN.md §8).
+
+# save

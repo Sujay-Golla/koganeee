@@ -1,0 +1,31 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "kogane-base"
+version = "0.1.0"
+description = "Kogane base-station: sensor fusion, voice pipeline, setpoint sender, screen renderer"
+requires-python = ">=3.11"
+dependencies = [
+    "numpy>=1.26",
+]
+
+[project.optional-dependencies]
+# Enable as you flesh out each subsystem.
+voice = [
+    "openwakeword",
+    "silero-vad",
+    # STT/LLM/TTS clients (deepgram-sdk, anthropic, elevenlabs) added when wiring cloud APIs
+]
+vision = [
+    "opencv-python>=4.8",
+    "ultralytics>=8.1",   # YOLOv8n person detection + built-in tracking
+]
+
+[project.scripts]
+kogane-base = "kogane_base.main:main"
+kogane-cv = "kogane_base.vision.demo:main"
+
+[tool.setuptools.packages.find]
+include = ["kogane_base*"]
