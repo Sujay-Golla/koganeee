@@ -1,5 +1,5 @@
 # Journal for building Kogane
-Total number of hours: 5
+Total number of hours: 59
 
 ## May 31 - Working on BOM
 ### Hours spent: 2
