@@ -57,7 +57,7 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 | USB webcam 720p or 1080p | 2 | $7.95 | [AliExpress](https://www.aliexpress.com/item/1005007740023631.html) | Fixed position to laptop USB |
 | 4S LiPo charger with AC plug | 1 | $15.00 | [Amazon](https://www.amazon.ca/dp/B0B3Y3JGDG) | |
 | XT60 Pigtail Male | 1 | $1.48 | [AliExpress](https://www.aliexpress.com/item/1005009156026988.html) | |
-| Radio TX module | 1 | $4.23 | [AliExpress](https://www.aliexpress.com/item/1005010228737836.html) | Out of budget |
+| Radio TX module | 1 | $4.23 | [AliExpress](https://www.aliexpress.com/item/1005010228737836.html) | For future integration as RC transmitter is currently out of budget |
 | JST Connector kit | 1 | $6.09 | [AliExpress](https://www.aliexpress.com/item/1005010491522001.html) | |
 | M2 nylon standoff kit | 1 | $3.68 | [AliExpress](https://www.aliexpress.com/item/32862529967.html) | |
 
