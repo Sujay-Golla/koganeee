@@ -12,15 +12,27 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 
 ## CAD Model
 ### Kogane
+<img width="980" height="964" alt="image" src="https://github.com/user-attachments/assets/b200f94b-656f-4320-be3f-b24d8ce48a3b" />
+<img width="992" height="910" alt="image" src="https://github.com/user-attachments/assets/df458ba6-bca9-428b-880d-90deb96635e5" />
+<img width="798" height="959" alt="image" src="https://github.com/user-attachments/assets/08c6b247-241f-48a1-9d0e-109e3dd4d917" />
 
 ### Internal Drone
+<img width="1501" height="799" alt="image" src="https://github.com/user-attachments/assets/ec1bab21-909c-41db-8db9-690d603431c6" />
+<img width="1321" height="1109" alt="image" src="https://github.com/user-attachments/assets/93035627-7043-48d6-b1bd-5564a406f42c" />
 
 ## PCB
 ### Schematic
+<img width="1387" height="931" alt="image" src="https://github.com/user-attachments/assets/bb2b5ac7-90bc-4274-b931-00fb84bcdf46" />
+<img width="1568" height="1069" alt="image" src="https://github.com/user-attachments/assets/1ec1b10e-5e11-453a-8a55-acaed5d3721d" />
+<img width="1613" height="1099" alt="image" src="https://github.com/user-attachments/assets/e60abecd-1433-410d-8b17-0e5342c7fff0" />
+<img width="1391" height="1060" alt="image" src="https://github.com/user-attachments/assets/3f2907a1-f4bd-4cfd-a7f8-639a140dbec5" />
 
 ### PCB Design
+<img width="899" height="1078" alt="image" src="https://github.com/user-attachments/assets/e341f406-db60-47e1-9b0b-7e8a7cd45e3c" />
 
 ### 3D Model
+<img width="1027" height="1165" alt="image" src="https://github.com/user-attachments/assets/e134e38a-ce69-46d6-a08a-3def4d459c11" />
+<img width="1085" height="1218" alt="image" src="https://github.com/user-attachments/assets/fe0aefad-1a92-4d20-b16c-394951de0245" />
 
 ## BOM
 
