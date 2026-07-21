@@ -21,6 +21,10 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 <img width="1321" height="1109" alt="image" src="https://github.com/user-attachments/assets/93035627-7043-48d6-b1bd-5564a406f42c" />
 
 ## PCB
+### Fabricated PCB
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/f6a1e768-8f11-47f3-93ab-253d0b9b717d" />
+<img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/3bfc89b6-0390-488f-b560-514c1967c6ac" />
+
 ### Schematic
 <img width="1387" height="931" alt="image" src="https://github.com/user-attachments/assets/bb2b5ac7-90bc-4274-b931-00fb84bcdf46" />
 <img width="1568" height="1069" alt="image" src="https://github.com/user-attachments/assets/1ec1b10e-5e11-453a-8a55-acaed5d3721d" />
