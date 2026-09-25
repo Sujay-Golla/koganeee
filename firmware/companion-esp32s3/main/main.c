@@ -10,6 +10,7 @@
 #include "esp_log.h"
 
 #include "wifi_udp.h"
+#include "telemetry.h"
 #include "link_fc.h"
 #include "audio_i2s.h"
 #include "display_spi.h"
@@ -34,11 +35,19 @@ void app_main(void)
     // FC bridge: MAVLink telemetry in, MSP override out (UART1).
     link_fc_start();
 
-    // Payload subsystems (safe to start even if hardware not attached — they stub out).
+    // Payload subsystems. Every one of these fails soft: a missing or unresponsive
+    // peripheral logs and returns, it does not abort boot or stall the link.
+    // Order matters only in that the display reads servo state for its status
+    // screen, so the servo is brought up first.
     servo_ledc_start();
     audio_i2s_start();
     display_spi_start();
     camera_dvp_start();
+
+    // Outbound telemetry last: it only needs wifi_udp_send(), which parks until
+    // the socket exists, and starting it after the peripherals means the first
+    // DRONE_STATE already reflects a settled system.
+    telemetry_start();
 
     ESP_LOGI(TAG, "all subsystems started");
     // app_main returns; FreeRTOS keeps the created tasks running.

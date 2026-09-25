@@ -19,13 +19,59 @@ voice = [
     # STT/LLM/TTS clients (deepgram-sdk, anthropic, elevenlabs) added when wiring cloud APIs
 ]
 vision = [
-    "opencv-python>=4.8",
-    "ultralytics>=8.1",   # YOLOv8n person detection + built-in tracking
+    # Versions pinned to what this repo is actually verified against. opencv-python (not
+    # the -headless build) is required: FaceID uses cv2.FaceDetectorYN / FaceRecognizerSF
+    # from opencv's objdetect module, and the demo needs cv2.imshow.
+    "opencv-python==5.0.0.88",
+    "ultralytics==8.4.87",   # YOLOv8n person detection + built-in tracking + pose
+    "numpy==2.5.1",
+    "torch==2.12.1",         # ultralytics backend; CPU wheel is fine
+    "torchvision==0.27.1",
+    "pillow==12.3.0",
+]
+# Pose and FaceID add no new pip dependencies on top of [vision]:
+#   pose   -> ultralytics yolov8n-pose.pt (auto-downloads, ~6.5 MB)
+#   faceid -> cv2.FaceDetectorYN + cv2.FaceRecognizerSF, weights fetched by
+#             kogane_base.vision.models into models/ (~227 KB + ~37 MB)
+radar = [
+    # Only needed to talk to an HLK-LD2450 wired to this machine over USB-UART. It is an
+    # extra rather than a base dependency because the base station must import and run with
+    # no radar attached: `tracking/ld2450.py` is pure stdlib, and `tracking/radar.py`
+    # imports pyserial lazily inside its worker thread and logs a clear install hint if it
+    # is missing. Pinned because a serial driver is not something to float.
+    "pyserial==3.5",
+]
+screen = [
+    # Only the *image* paths of the drone panel need Pillow: loading a file, letterboxing
+    # it to 320x240, and composing a readout frame. Text-mode output (SCREEN_FRAME fmt=2)
+    # is pure struct packing, so the base station still starts without this installed and
+    # `kogane_base.screen.frames` raises a PillowMissing with an install hint instead of an
+    # ImportError at import time. Already satisfied by [vision].
+    "pillow==12.3.0",
+]
+audio = [
+    # Nothing. Deliberately: 16 kHz mono PCM conversion is numpy plus the stdlib `wave`
+    # module, and text-to-speech shells out to the SAPI synthesiser Windows already ships
+    # (see kogane_base/audio/tts.py). No TTS SDK, no sounddevice, no PortAudio — the drone
+    # is the audio device, and it is on the other end of a UDP socket.
+]
+dev = [
+    "pytest==8.3.4",
 ]
 
 [project.scripts]
 kogane-base = "kogane_base.main:main"
 kogane-cv = "kogane_base.vision.demo:main"
+kogane-calibrate = "kogane_base.vision.calibrate:main"
+kogane-mmwave-sim = "kogane_base.tools.mmwave_sim:main"
+# Hand-run demo tools. These take --host/--port defaulting to CONFIG, so they work with the
+# base station stopped — which is the point, they are what gets typed during a demo.
+kogane-screen = "kogane_base.tools.screen_cli:main"
+kogane-say = "kogane_base.tools.say_cli:main"
+kogane-audio = "kogane_base.tools.audio_cli:main"
 
 [tool.setuptools.packages.find]
 include = ["kogane_base*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

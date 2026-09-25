@@ -50,8 +50,8 @@ def run_easyeda2kicad_from_file(input_file, output_dir="./lib/lcsc", python_exec
 
 def main(argv=None):
     parser = argparse.ArgumentParser(description="Run easyeda2kicad for a list of LCSC IDs.")
-    parser.add_argument("input_file", nargs="?", default="./hardware/fc/lcsc.txt", help="Path to file with one LCSC ID per line")
-    parser.add_argument("output_dir", nargs="?", default="./hardware/fc/lib/lcsc", help="Output directory")
+    parser.add_argument("input_file", nargs="?", default="./pcb/fc/lcsc.txt", help="Path to file with one LCSC ID per line")
+    parser.add_argument("output_dir", nargs="?", default="./pcb/fc/lib/lcsc", help="Output directory")
     parser.add_argument("--python", dest="python_exec", default="python",
                         help="Python executable to use (default: 'python')")
     args = parser.parse_args(argv)

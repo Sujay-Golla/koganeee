@@ -21,15 +21,616 @@ menu "Kogane Companion"
         default 1
 
     config KGN_FC_UART_TX
-        int "FC UART TX GPIO"
-        default 17
+        int "FC UART TX GPIO (net ESP32-TX -> STM32 PA9)"
+        default 43
+        help
+          GPIO43 is WROOM-1 pad 37 (TXD0), net ESP32-TX, wired to STM32F722 PA9.
+          This is the only ESP32<->STM32 serial link on the PCB. The pin is shared
+          with the IDF console — see "Owner of the GPIO43/44 UART pins" below.
 
     config KGN_FC_UART_RX
-        int "FC UART RX GPIO"
-        default 18
+        int "FC UART RX GPIO (net ESP32-RX <- STM32 PA10)"
+        default 44
+        help
+          GPIO44 is WROOM-1 pad 36 (RXD0), net ESP32-RX, wired to STM32F722 PA10.
+          The RXD0 castellation on this module is physically destroyed, so this
+          pin cannot receive. The pending rework is a wire from STM32 PA10 to
+          module pad 15 (IO3, currently unconnected); after that rework this
+          default becomes 3.
+          See PINMAP.md.
+
+    choice KGN_UART0_PINS_OWNER
+        prompt "Owner of the GPIO43/44 UART pins (shared STM32 link)"
+        default KGN_PINS_OWNER_CONSOLE
+        help
+          GPIO43/44 are the only ESP32<->STM32 serial link on this PCB. The IDF
+          console now lives on USB-Serial-JTAG, so logging no longer needs these
+          pads — but GPIO44 (RXD0) is physically dead, so the FC link cannot
+          receive on them either. Keep CONSOLE until the PA10 -> IO3 rework lands.
+
+        config KGN_PINS_OWNER_CONSOLE
+            bool "IDF console (bring-up logging over the FT232)"
+        config KGN_PINS_OWNER_FC_LINK
+            bool "FC link (MSP out / MAVLink in to the STM32)"
+    endchoice
+
+    #
+    # Telemetry — outbound DRONE_STATE / HEARTBEAT to the base station
+    #
+    config KGN_TELEM_STATE_HZ
+        int "DRONE_STATE transmit rate (Hz)"
+        default 5
+        range 1 50
+        help
+          How often the companion sends DRONE_STATE (0x20) to CONFIG_KGN_BASE_IP.
+          The base station learns the drone's address from these datagrams, so
+          this also doubles as address discovery. 5 Hz is enough for a status
+          readout without competing with the inbound setpoint stream.
+
+    config KGN_TELEM_HEARTBEAT_HZ
+        int "HEARTBEAT transmit rate (Hz)"
+        default 1
+        range 1 10
+        help
+          How often the companion sends HEARTBEAT (0x7F) with uptime and role.
+          Kept slower than DRONE_STATE: it exists for liveness, not for data.
 
     config KGN_SERVO_GPIO
         int "Servo (MG90S) LEDC GPIO"
+        default 42
+        help
+          GPIO42 is WROOM-1 pad 35, net SRV_SIG — the only servo signal net on
+          the PCB. This previously defaulted to 21, which is pad 23 / net HS
+          (camera HSYNC); driving the servo there fights the camera.
+          Verified against the PCB netlist, see PINMAP.md.
+
+    config KGN_SERVO_RETRACTED_DEG
+        int "Screen mechanism RETRACTED angle (deg)"
+        default 0
+        range 0 180
+        help
+          Servo angle with the screen stowed inside the body. This is the boot
+          position. Tune against the real mechanism before powering the servo
+          with the screen attached — a wrong end stop will stall the MG90S.
+
+    config KGN_SERVO_DEPLOYED_DEG
+        int "Screen mechanism DEPLOYED angle (deg)"
+        default 110
+        range 0 180
+        help
+          Servo angle with the screen rolled out and visible. Tune to the
+          mechanism; 110 is a placeholder, not a measured value.
+
+    config KGN_SERVO_SWEEP_MS
+        int "Screen deploy/retract sweep duration (ms)"
+        default 900
+        range 0 10000
+        help
+          Time taken to travel between the retracted and deployed angles. The
+          sweep is interpolated in 20 ms steps (one PWM period per step) so the
+          mechanism moves deliberately instead of snapping, which reads much
+          better on video. 0 means jump straight to the target.
+
+    config KGN_SERVO_CMD_MIN_MS
+        int "Minimum interval between accepted servo commands (ms)"
+        default 400
+        range 0 5000
+        help
+          Rate limit on MODE_CMD-driven servo moves. Without it a flood of
+          datagrams (hostile or just a base-station bug) would reverse the
+          MG90S continuously and cook the gearbox.
+
+    #
+    # Display — ILI9341 320x240 SPI LCD (verified against PCB netlist, see PINMAP.md)
+    #
+    # BOM part is an ILI9341 2.8" SPI touch panel. An earlier revision of this
+    # file described it as "ST7789-class", which is wrong — the init sequence and
+    # the panel's 320x240 native geometry are ILI9341.
+    #
+    config KGN_LCD_CS
+        int "LCD chip select GPIO (net LCD_CS)"
+        default 10
+        help
+          GPIO10 is WROOM-1 pad 18, net LCD_CS.
+
+    config KGN_LCD_SCK
+        int "LCD SPI clock GPIO (net LCD_SCK)"
+        default 12
+        help
+          GPIO12 is WROOM-1 pad 20, net LCD_SCK.
+
+    config KGN_LCD_MOSI
+        int "LCD SPI MOSI GPIO (net SDI)"
+        default 11
+        help
+          GPIO11 is WROOM-1 pad 19, net SDI (panel-side MOSI).
+
+    config KGN_LCD_DC
+        int "LCD data/command GPIO (net D/C)"
+        default 9
+        help
+          GPIO9 is WROOM-1 pad 17, net D/C.
+
+    config KGN_LCD_BL
+        int "LCD backlight GPIO (net LED)"
+        default 8
+        help
+          GPIO8 is WROOM-1 pad 12, net LED (backlight enable).
+
+    # There is deliberately NO KGN_LCD_RESET / KGN_LCD_PMDN option.
+    #
+    # The panel's reset is J4 pad 11, which is the board-wide `RESET` net (shared
+    # with SW1 pad 2, C25 and the STM32F722 NRST). No ESP32 GPIO reaches it, so
+    # there is nothing to configure: the LCD resets at power-on and when SW1 is
+    # pressed, and never on firmware's say-so.
+    #
+    # This option used to exist as KGN_LCD_PMDN = 46 and display_spi.c drove it
+    # as a panel reset. GPIO46 (net PMDN) is the OV2640's power-down line and has
+    # no connection to J4 at all — it is now CONFIG_KGN_CAM_PWDN, owned by
+    # main/camera_dvp.c. See PINMAP.md.
+
+    config KGN_LCD_SPI_HZ
+        int "LCD SPI clock (Hz)"
+        default 20000000
+        help
+          ILI9341 datasheet write cycle allows ~10 MHz nominal; 20-40 MHz works
+          in practice on short traces. Drop this to 10000000 if the panel shows
+          torn or noisy pixels — the bodge-wire-heavy state of this board makes
+          signal integrity a real possibility.
+
+    config KGN_LCD_STATUS_MS
+        int "Status screen refresh interval (ms)"
+        default 500
+        range 100 10000
+        help
+          How often the local status screen (name / IP / RSSI / uptime) is
+          redrawn. Only the value fields are repainted, not the whole panel.
+
+    config KGN_LCD_BL_ACTIVE_LOW
+        bool "LCD backlight enable is active low"
+        default n
+        help
+          Most of these 2.8" modules tie the LED pin high-side through a
+          transistor, so active high. Flip this if the backlight comes up
+          inverted.
+
+    #
+    # Audio — I2S mic + speaker (verified against PCB netlist, see PINMAP.md)
+    #
+    config KGN_I2S_BCLK
+        int "I2S bit clock GPIO (net BCLK(38))"
+        default 39
+        help
+          GPIO39 is WROOM-1 pad 32, net "BCLK(38)". The net reaches U11 pin 16
+          (MAX98357A BCLK) and J3 (the INMP441's SCK), which is the whole of the
+          bit-clock net on this board.
+
+          RESOLVED — no bench verification needed. The "(38)" in the net NAME is a
+          stale label carried over from an earlier pin assignment; it is text, not
+          copper. Connectivity is unambiguous: the net lands on U4 pad 32, and pad
+          32 is IO39. BCLK = 39. Earlier revisions of this file and PINMAP.md
+          asked for a scope check here; that question is closed.
+
+    config KGN_I2S_WS
+        int "I2S word select / LRCLK GPIO (net WS(39))"
+        default 41
+        help
+          GPIO41 is WROOM-1 pad 34, net "WS(39)". The net reaches U11 pin 14
+          (MAX98357A LRCLK) and J3 (the INMP441's WS).
+
+          RESOLVED — no bench verification needed. As with BCLK above, the "(39)"
+          suffix is a stale label from an earlier pin assignment. The net lands on
+          U4 pad 34, and pad 34 is IO41. WS = 41.
+
+    config KGN_I2S_DOUT
+        int "I2S data out to the speaker amp GPIO (net /ESP32/DIN -> U11 DIN)"
+        default 38
+        help
+          GPIO38 is WROOM-1 pad 31, net "/ESP32/DIN", which runs to U11 pin 1.
+
+          U11 is a MAX98357A I2S class-D speaker amplifier soldered on the board.
+          Pin 1 is DIN, its serial-data INPUT, so this is the ESP32's data OUTPUT.
+          U11 pin 7 VDD is +3.3V; pins 9/10 OUTP/OUTN are nets OUT+/OUT- and go to
+          J6, labelled SPEAKER. So the full path is
+          GPIO38 -> U11 DIN -> U11 OUT+/OUT- -> J6 -> speaker.
+
+          PREVIOUSLY SWAPPED WITH KGN_I2S_DIN, AND IT OVERHEATED THE AMPLIFIER.
+          This option used to default to 40 and KGN_I2S_DIN to 38 — exactly
+          inverted. The mistake is easy to see once named: the net feeding the
+          amp is *called* DIN (it is the amp's input) and the net coming from the
+          microphone is *called* SD, so matching net names to I2S roles gets both
+          pins backwards. Only connectivity decides which is which.
+
+          Why the swap was a hardware-safety bug and not just silence: with DOUT
+          on 40, nothing ever drove U11 pin 1, so the amp's data input floated.
+          main/audio_i2s.c enables the I2S TX channel at boot and deliberately
+          never disables it (BCLK/WS came from the TX side and the mic needs
+          them), so BCLK and LRCLK kept running. A MAX98357A that sees valid
+          clocks does not enter its no-clock shutdown, so it stayed on and
+          amplified whatever its floating input picked up into a 4 ohm load off
+          3.3V. That is the reported heat near SW3 with USB power only and a
+          speaker on J6.
+
+          NOT HARDWARE-VERIFIED. This follows the netlist; nobody has measured it.
+
+    config KGN_I2S_DIN
+        int "I2S data in from the mic GPIO (net SD <- INMP441 SD)"
+        default 40
+        help
+          GPIO40 is WROOM-1 pad 33, net "SD", which runs to J2 pin 1.
+
+          J2 (silkscreen MIC_1) and J3 (silkscreen MIC_2) are together the INMP441
+          microphone breakout connector: J2 carries "SD" plus +3.3V and GND, J3
+          carries GND, "WS(39)" and "BCLK(38)". "SD" is the INMP441's Serial Data
+          OUTPUT, so it is the ESP32's data INPUT.
+
+          PREVIOUSLY SWAPPED WITH KGN_I2S_DOUT. This option used to default to 38.
+          Beyond killing capture, the old value configured GPIO40 as an I2S data
+          OUTPUT while the copper wires it to the microphone's data output, so
+          with the mic plugged in two drivers fought over that net. See
+          KGN_I2S_DOUT for the amplifier-overheating half of the same bug.
+
+          NOT HARDWARE-VERIFIED. This follows the netlist; nobody has measured it.
+
+    config KGN_AUDIO_SAMPLE_RATE
+        int "Audio sample rate (Hz), shared by mic and speaker"
+        default 16000
+        range 8000 48000
+        help
+          ONE rate for both directions. The INMP441 and the speaker amp share
+          BCLK and WS on this board, so the I2S controller runs full duplex and
+          the hardware physically cannot clock the two directions at different
+          rates — see the topology note at the top of main/audio_i2s.c.
+
+          16000 is also baked into the wire format: PROTOCOL.md §1 defines
+          AUDIO_TTS/AUDIO_MIC fmt 1 as 16 kHz mono. Changing this value makes the
+          firmware disagree with the protocol doc and with the base station;
+          audio_i2s.c logs a loud warning at boot if you do.
+
+    config KGN_AUDIO_SLOT_RIGHT
+        bool "Mic is strapped to the RIGHT I2S slot"
+        default n
+        help
+          The INMP441's L/R pin selects which half of the I2S frame it drives.
+          Tied low (the usual breakout default) it drives the LEFT slot, which is
+          what this firmware captures by default.
+
+          If the mic reads as a dead constant with no response to sound, and the
+          clocks check out, flip this. It is the cheapest of the mic unknowns to
+          eliminate: one config change and a reflash.
+
+    config KGN_MIC_SHIFT
+        int "Mic 32-bit slot -> 16-bit PCM right shift"
+        default 14
+        range 8 16
+        help
+          The INMP441 is a 24-bit part that sits in a 32-bit slot, so a received
+          word is (24-bit sample << 8) with the low 8 bits zero. 16 is the
+          bit-exact truncation to 16-bit PCM with no gain and no possible
+          clipping. Every step below 16 is +6 dB of digital gain, clamped.
+
+          14 (+12 dB) is the default because the INMP441 is a quiet part and a
+          bit-exact conversion makes normal speech sit low enough that the level
+          meter looks broken. Raise towards 16 if the RMS log shows clamping.
+
+    config KGN_MIC_LEVEL_LOG_MS
+        int "Mic level (RMS/peak) log interval (ms), 0 = off"
+        default 2000
+        range 0 60000
+        help
+          Prints the capture level on the console so the mic can be confirmed
+          without the base station running or the stream enabled. This is a
+          bring-up aid; set it to 0 once the mic is trusted.
+
+    config KGN_MIC_STREAM_ON_BOOT
+        bool "Start streaming mic audio to the base at boot"
+        default n
+        help
+          Leave this OFF. Continuously streaming microphone audio over UDP is a
+          privacy matter first and a bandwidth cost second (16 kHz mono PCM is
+          256 kbit/s on a link that also carries setpoints), and it must not be
+          possible to enable it by accident.
+
+          The runtime switch is AUDIO_TTS (0x40) fmt 2 cmd 1 / 2, so the base
+          station turns it on explicitly when it wants to listen. This Kconfig
+          exists only so a bench session can skip that round trip.
+
+    config KGN_AUDIO_TX_ENABLE
+        bool "Enable the speaker / I2S TX path"
+        default n
+        help
+          Master gate on the speaker. OFF by default. With this off, main/
+          audio_i2s.c never allocates or enables an I2S TX channel, so nothing
+          can drive U11's data input, and it parks CONFIG_KGN_I2S_DOUT as a plain
+          GPIO driven LOW so the MAX98357A sees a constant zero sample instead of
+          a floating input.
+
+          Why the default is off: a wrong or absent data line on a clocked class-D
+          amplifier is not a silent failure, it is a thermal one. The DOUT/DIN
+          swap fixed in KGN_I2S_DOUT left U11's DIN floating while BCLK and LRCLK
+          kept running, and the part happily amplified noise into a 4 ohm load off
+          3.3V until it got hot. The generic lesson is that the speaker should not
+          come up on its own; a human should confirm the wiring and then turn it
+          on. Turn this on (and KGN_AUDIO_BOOT_TONE, or send AUDIO_TTS fmt 2
+          cmd 3) once GPIO38 has been verified to reach U11 pin 1.
+
+          Clock consequence, which is the reason this needs a knob rather than
+          just not calling i2s_channel_enable(): BCLK and WS were generated by the
+          TX side, so simply disabling TX would have stopped the microphone's
+          clock dead. With TX off, audio_i2s.c allocates the RX channel ALONE as
+          an I2S master, and the RX master drives BCLK/WS itself. That is a
+          supported configuration in IDF 6.1 — i2s_new_channel() accepts a NULL tx
+          handle, and i2s_std_set_gpio() assigns the master RX bit-clock and
+          word-select signals as OUTPUTS when there is no TX channel to share
+          with. The mic keeps working with the speaker gated off.
+
+          With TX off the playback path still exists as a sink: AUDIO_TTS PCM
+          chunks are dequeued and freed rather than leaking, and a CTRL SELFTEST
+          (fmt 2 cmd 3) is answered with an explicit log line saying the TX path
+          is disabled instead of being silently ignored.
+
+    config KGN_AUDIO_BOOT_TONE
+        bool "Play the speaker self-test tone at boot"
+        default n
+        depends on KGN_AUDIO_TX_ENABLE
+        help
+          Fires the three-note self-test sequence once, a second or so after
+          boot. This is the only thing in the firmware that proves the amp and
+          the speaker work at all.
+
+          DEFAULT CHANGED FROM y TO n. Nothing should drive a speaker
+          automatically until a human has confirmed the wiring is right. This
+          option used to be on so the board could be checked while it was being
+          wired, but the DOUT/DIN swap (see KGN_I2S_DOUT) showed what that costs
+          when the pin map is wrong: an automatic boot tone means an unattended
+          board starts pushing power into an amplifier whose data line may not be
+          connected to anything. An unprompted tone also proves nothing about a
+          part nobody is standing next to.
+
+          The tone has not gone away: it is still available on demand at any time
+          with AUDIO_TTS (0x40) fmt 2 cmd 3, which is the intended way to run it
+          now — deliberately, with someone watching the board.
+
+    config KGN_AUDIO_TONE_MS
+        int "Self-test tone duration per note (ms)"
+        default 150
+        range 20 2000
+
+    config KGN_AUDIO_TONE_AMPL
+        int "Self-test tone amplitude (0..32767)"
+        default 6000
+        range 100 32767
+        help
+          6000 is about -15 dBFS: clearly audible on a 3 W driver without
+          slamming an amplifier whose gain setting on this board is unverified.
+          Turn it down before turning it up.
+
+    config KGN_AUDIO_TTS_Q_DEPTH
+        int "AUDIO_TTS playback queue depth (chunks)"
+        default 12
+        range 2 32
+        help
+          Jitter absorbed before playback gaps, in chunks. At the 45 ms maximum
+          chunk size this is ~540 ms; at a more typical 20 ms chunk it is ~240 ms.
+          When the queue is full the OLDEST chunk is dropped, never the UDP
+          receive path — the rx task must not block on audio.
+
+    #
+    # I2C — camera SCCB / sensors (verified against PCB netlist, see PINMAP.md)
+    #
+    config KGN_I2C_SDA
+        int "I2C SDA GPIO (net SDA)"
+        default 47
+        help
+          GPIO47 is WROOM-1 pad 24, net SDA.
+
+    config KGN_I2C_SCL
+        int "I2C SCL GPIO (net SCL)"
+        default 48
+        help
+          GPIO48 is WROOM-1 pad 25, net SCL.
+
+    #
+    # Camera — DVP parallel interface (verified against PCB netlist, see PINMAP.md)
+    #
+    config KGN_CAM_PCLK
+        int "Camera pixel clock GPIO (net PCLK)"
+        default 13
+        help
+          GPIO13 is WROOM-1 pad 21, net PCLK.
+
+    config KGN_CAM_XCLK
+        int "Camera master clock GPIO (net MCLK)"
+        default 14
+        help
+          GPIO14 is WROOM-1 pad 22, net MCLK (sensor XCLK input).
+
+    config KGN_CAM_VSYNC
+        int "Camera VSYNC GPIO (net VS)"
+        default 45
+        help
+          GPIO45 is WROOM-1 pad 26, net VS.
+
+    config KGN_CAM_HSYNC
+        int "Camera HSYNC GPIO (net HS)"
         default 21
+        help
+          GPIO21 is WROOM-1 pad 23, net HS. This is the pad the servo default
+          used to squat on — see KGN_SERVO_GPIO.
+
+    config KGN_CAM_D0
+        int "Camera data D0 GPIO"
+        default 4
+
+    config KGN_CAM_D1
+        int "Camera data D1 GPIO"
+        default 5
+
+    config KGN_CAM_D2
+        int "Camera data D2 GPIO"
+        default 6
+
+    config KGN_CAM_D3
+        int "Camera data D3 GPIO"
+        default 15
+
+    config KGN_CAM_D4
+        int "Camera data D4 GPIO"
+        default 7
+
+    config KGN_CAM_D5
+        int "Camera data D5 GPIO"
+        default 16
+
+    config KGN_CAM_D6
+        int "Camera data D6 GPIO"
+        default 17
+        help
+          GPIO17 — note the FC UART TX default used to sit here, which collided
+          with this camera data net. See PINMAP.md.
+
+    config KGN_CAM_D7
+        int "Camera data D7 GPIO"
+        default 18
+        help
+          GPIO18 — note the FC UART RX default used to sit here, which collided
+          with this camera data net. See PINMAP.md.
+
+    config KGN_CAM_D8
+        int "Camera data D8 GPIO"
+        default 1
+
+    config KGN_CAM_D9
+        int "Camera data D9 GPIO"
+        default 2
+
+    config KGN_CAM_PWDN
+        int "Camera power-down GPIO (net PMDN), -1 if none"
+        default 46
+        help
+          GPIO46 is WROOM-1 pad 16, net PMDN -> camera FPC1 pad 8. Despite the
+          "PMDN" net name this is NOT a display line: it runs to the camera
+          connector and nowhere else, so on this board it is the OV2640's PWDN
+          input, and main/camera_dvp.c is its only owner.
+
+          PREVIOUSLY MISLABELLED. Up to now this pin was CONFIG_KGN_LCD_PMDN and
+          main/display_spi.c drove it as a "panel reset", leaving it HIGH after
+          init. Both halves of that were wrong. The LCD's reset is J4 pad 11 on
+          the board-wide RESET net (SW1 / STM32 NRST), which no GPIO can drive,
+          so the pulse never reached the panel; and OV2640 PWDN is ACTIVE HIGH,
+          so parking GPIO46 high held the sensor in power-down and the camera
+          could never have worked. display_spi.c no longer touches this pin.
+
+          Polarity: active high, and the esp32-camera driver handles it. Given a
+          pin_pwdn >= 0 it configures the line as an output, pulses it HIGH for
+          10 ms and then drives it LOW for 10 ms before SCCB probing (see
+          camera_probe() in managed_components/espressif__esp32-camera/driver/
+          esp_camera.c, "carefull, logic is inverted compared to reset pin"), and
+          leaves it LOW — i.e. sensor running. So this is passed as pin_pwdn and
+          never toggled by hand.
+
+          Set to -1 only if the line should be left floating; the sensor's
+          internal pull then decides, and an SCCB timeout at init is the likely
+          result. There is no reason to do this on this board.
+
+    config KGN_CAM_RESET
+        int "Camera reset GPIO, -1 if none"
+        default -1
+        help
+          -1 because there is no ESP32-controllable camera reset on this board.
+          The camera FPC's RESET (FPC1 pad 6) is wired to the board-wide RESET
+          net — shared with SW1, the STM32F722 NRST (U1 pad 7) and the LCD
+          connector — so it is held by the reset circuit and no GPIO can drive it.
+
+          Consequence: the sensor cannot be hard-reset from firmware. The driver
+          falls back to a software reset over SCCB, which does not recover a
+          sensor that has stopped answering SCCB at all. A wedged OV2640 needs a
+          board reset (which does pull the shared RESET net) or a power cycle.
+
+    config KGN_CAM_XCLK_HZ
+        int "Camera XCLK frequency (Hz)"
+        default 20000000
+        range 6000000 24000000
+        help
+          20 MHz is the OV2640's nominal clock and divides the ESP32-S3's 160 MHz
+          LCD_CAM source exactly by 8 — the peripheral's divider is integer, so a
+          frequency that does not divide 160 MHz cleanly is silently rounded.
+          Drop to 10000000 if the FPC ribbon turns out to be too long or too
+          noisy for 20 MHz; the frame rate halves but the sensor still works.
+
+    choice KGN_CAM_FRAMESIZE
+        prompt "Camera frame size"
+        default KGN_CAM_FRAMESIZE_VGA
+        help
+          The consumer is the base station's CV pipeline, which opens the MJPEG
+          URL with cv2.VideoCapture (base-station/kogane_base/vision/sources.py),
+          so what matters is sustained frame rate at a resolution that still has
+          enough pixels on a face. VGA is the deliberate middle of that trade;
+          see the note at the top of main/camera_dvp.c.
+
+        config KGN_CAM_FRAMESIZE_QVGA
+            bool "QVGA 320x240"
+        config KGN_CAM_FRAMESIZE_HVGA
+            bool "HVGA 480x320"
+        config KGN_CAM_FRAMESIZE_VGA
+            bool "VGA 640x480"
+        config KGN_CAM_FRAMESIZE_SVGA
+            bool "SVGA 800x600"
+    endchoice
+
+    config KGN_CAM_JPEG_QUALITY
+        int "Camera JPEG quality (0 best .. 63 worst)"
+        default 12
+        range 4 63
+        help
+          This is the OV2640's own quantisation setting, not a software encoder —
+          the sensor emits JPEG and the ESP32 only DMAs it out, so quality costs
+          bytes on the Wi-Fi link, not CPU. 12 is the usual streaming figure:
+          roughly 25-45 KB per VGA frame with no visible blocking on faces.
+          Below about 8 the frames get big enough to matter on the link; above
+          about 20 the block artefacts start to cost the CV pipeline detections.
+
+    config KGN_CAM_FB_COUNT
+        int "Camera frame buffers (in PSRAM)"
+        default 2
+        range 1 4
+        help
+          2 puts the DVP capture in continuous mode, so a frame is ready while
+          the previous one is still being sent — with 1 the driver has to wait
+          for the next VSYNC after each grab and the frame rate roughly halves.
+          Each VGA JPEG buffer is about 61 KB of the 8 MB PSRAM, so more buffers
+          are cheap in RAM; they just add latency, which a CV consumer does not
+          want. Do not raise this above 1 for non-JPEG formats.
+
+    config KGN_CAM_STREAM_MAX_FPS
+        int "MJPEG stream frame rate cap (fps), 0 = uncapped"
+        default 15
+        range 0 30
+        help
+          Hard ceiling on how fast /stream pushes frames, independent of what the
+          sensor can produce. Video is bulk traffic sharing one radio with the
+          setpoint stream and 16 kHz audio in both directions; this is the knob
+          that stops a browser tab from turning the camera into a flood. 15 fps
+          at VGA is roughly 4 Mbit/s, which is comfortable, and is plenty for
+          following a walking person.
+
+    config KGN_CAM_HTTP_PORT
+        int "Camera HTTP server port"
+        default 80
+        help
+          80 so the documented URL is plain http://<drone-ip>/stream
+          (firmware/shared/PROTOCOL.md §3) with no port to remember.
+
+    config KGN_CAM_HTTP_PRIO
+        int "Camera HTTP server task priority"
+        default 2
+        range 1 5
+        help
+          Must stay below every task on or near the control path: kgn_udp is 6,
+          kgn_tlm and kgn_aout are 5, kgn_servo and kgn_amic are 4, kgn_disp is
+          3. Serving JPEG is bulk work with no deadline, so it sits at 2 — above
+          idle, below everything that matters. Raising this above 3 means a
+          browser holding a stream open can delay the panel; above 5 it can delay
+          setpoints, and iNAV cuts the motors after 200 ms without RC.
 
 endmenu

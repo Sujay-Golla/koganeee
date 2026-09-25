@@ -6,6 +6,11 @@
  *   - OUTBOUND : MSP v2 RC override          -> inject off-board setpoints as RC channels.
  *
  * iNAV does NOT accept MAVLink setpoints, which is why control uses MSP.
+ *
+ * Pin ownership: TX=GPIO43 / RX=GPIO44 (nets ESP32-TX/ESP32-RX -> STM32 PA9/PA10)
+ * are the only serial link to the FC on this PCB, and the IDF console defaults to
+ * the same pair. CONFIG_KGN_PINS_OWNER_* picks the owner; this module is inert
+ * unless CONFIG_KGN_PINS_OWNER_FC_LINK is selected.
  */
 #include <string.h>
 #include "freertos/FreeRTOS.h"
@@ -20,6 +25,18 @@ static const char *TAG = "link_fc";
 #define FC_UART   (CONFIG_KGN_FC_UART_NUM)
 #define FC_BAUD   115200
 
+/* The UART GPIO matrix can route the UART1 peripheral to GPIO43/44, so the port
+ * number never has to change — but the console must be off those pads first. */
+#if defined(CONFIG_KGN_PINS_OWNER_FC_LINK) && \
+    (defined(CONFIG_ESP_CONSOLE_UART_DEFAULT) || defined(CONFIG_ESP_CONSOLE_UART_CUSTOM))
+#warning "FC link owns GPIO43/44 but the IDF console is still on UART0: console output will corrupt MSP traffic. Set CONFIG_ESP_CONSOLE_NONE=y."
+#endif
+
+/* The framing/task helpers below are only called when the FC link owns the pins;
+ * keep them compiled (so both configs stay type-checked) but silence the
+ * unused-function noise in the console-owning build. */
+#define KGN_FC_ONLY  __attribute__((unused))
+
 /* ---- MSP v2 framing ($X<) ---- */
 // TODO(kogane): implement full MSP v2 encode. Skeleton computes the header only.
 #define MSP_SET_RAW_RC 200
@@ -32,7 +49,7 @@ static uint8_t msp_crc8_dvb_s2(uint8_t crc, uint8_t b)
     return crc;
 }
 
-static void msp_send(uint16_t function, const uint8_t *payload, uint16_t size)
+static KGN_FC_ONLY void msp_send(uint16_t function, const uint8_t *payload, uint16_t size)
 {
     uint8_t hdr[9];
     hdr[0]='$'; hdr[1]='X'; hdr[2]='<';
@@ -49,11 +66,15 @@ static void msp_send(uint16_t function, const uint8_t *payload, uint16_t size)
 
 /* Map a velocity/yaw setpoint onto RC channels (1000..2000us). Keep the channel
  * order identical to the FC `map`/`rc` config in fc-inav/config/kogane-fc.diff. */
-static uint16_t clamp_rc(int v) { return v < 1000 ? 1000 : (v > 2000 ? 2000 : (uint16_t)v); }
+static KGN_FC_ONLY uint16_t clamp_rc(int v) { return v < 1000 ? 1000 : (v > 2000 ? 2000 : (uint16_t)v); }
 
 void link_fc_apply_setpoint(const kgn_setpoint_t *sp)
 {
     if (!sp) return;
+#if !defined(CONFIG_KGN_PINS_OWNER_FC_LINK)
+    /* UART driver was never installed (console owns GPIO43/44) — drop the setpoint. */
+    return;
+#else
     // TODO(kogane): proper velocity->RC scaling + expo; this is a linear placeholder.
     uint16_t ch[8];
     ch[0] = clamp_rc(1500 + sp->vy_cms);       // roll   (A)
@@ -62,6 +83,7 @@ void link_fc_apply_setpoint(const kgn_setpoint_t *sp)
     ch[3] = clamp_rc(1500 + sp->yaw_rate_cds); // yaw    (R)
     ch[4] = 1500; ch[5] = 1500; ch[6] = 1500; ch[7] = 1500; // aux
     msp_send(MSP_SET_RAW_RC, (const uint8_t *)ch, sizeof(ch));
+#endif
 }
 
 /* ---- MAVLink telemetry parse (inbound) ---- */
@@ -72,7 +94,7 @@ static void parse_mavlink(const uint8_t *buf, int n)
     (void)buf; (void)n;
 }
 
-static void fc_task(void *arg)
+static KGN_FC_ONLY void fc_task(void *arg)
 {
     uint8_t rx[256];
     while (1) {
@@ -84,6 +106,15 @@ static void fc_task(void *arg)
 
 void link_fc_start(void)
 {
+#if !defined(CONFIG_KGN_PINS_OWNER_FC_LINK)
+    /* Console owns GPIO43/44: bringing the FC UART up here would fight stdout on
+     * the same pads, so stay completely off the bus. */
+    ESP_LOGW(TAG, "FC link disabled: IDF console owns GPIO43/44 "
+                  "(TX=%d RX=%d). Select CONFIG_KGN_PINS_OWNER_FC_LINK=y "
+                  "(with CONFIG_ESP_CONSOLE_NONE=y) to hand the pins to the STM32.",
+             CONFIG_KGN_FC_UART_TX, CONFIG_KGN_FC_UART_RX);
+    return;
+#else
     uart_config_t uc = {
         .baud_rate = FC_BAUD, .data_bits = UART_DATA_8_BITS,
         .parity = UART_PARITY_DISABLE, .stop_bits = UART_STOP_BITS_1,
@@ -94,5 +125,7 @@ void link_fc_start(void)
     ESP_ERROR_CHECK(uart_set_pin(FC_UART, CONFIG_KGN_FC_UART_TX, CONFIG_KGN_FC_UART_RX,
                                  UART_PIN_NO_CHANGE, UART_PIN_NO_CHANGE));
     xTaskCreate(fc_task, "fc_link", 4096, NULL, 7, NULL);
-    ESP_LOGI(TAG, "FC link up on UART%d", FC_UART);
+    ESP_LOGI(TAG, "FC link up on UART%d (TX=%d RX=%d)", FC_UART,
+             CONFIG_KGN_FC_UART_TX, CONFIG_KGN_FC_UART_RX);
+#endif
 }

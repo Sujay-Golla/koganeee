@@ -5,7 +5,16 @@
 # Generated as a hand-written baseline, not dumped from a live FC.
 
 # ---- resources: repoint to Kogane pins (only needed on a generic stock target) ----
-# Motors (DShot on TIM2 CH1-4)
+# Matek owns PA0–PA3 as UART4 (TX/RX) and UART2 (TX/RX, default SBUS).
+# Free those first or resource MOTOR 1 A00 fails and DShot never leaves the chip.
+resource LED_STRIP 1 NONE
+resource SERIAL_TX 2 NONE
+resource SERIAL_RX 2 NONE
+resource SERIAL_TX 4 NONE
+resource SERIAL_RX 4 NONE
+serial 1 0 115200 115200 0 115200
+
+# Motors (DShot on TIM2 CH1-4) — J1 pins 8,7,6,5
 resource MOTOR 1 A00
 resource MOTOR 2 A01
 resource MOTOR 3 A02
@@ -79,9 +88,12 @@ feature BLACKBOX
 set blackbox_device = SDCARD
 set sdcard_mode = SDIO
 
+# ---- motors enabled on the bench (iNAV 9 leaves PWM off after flash) ----
+feature PWM_OUTPUT_ENABLE
+
 # ---- failsafe (bring-up safety) ----
-set failsafe_procedure = LAND
-# TODO(kogane): define UDP/Wi-Fi link-loss behavior too — the ESP32 must signal link state
-#               and drop to RC / land if the off-board loop dies (DESIGN.md §8).
+set failsafe_procedure = DROP
+# TODO(kogane): switch to LAND only after ELRS + GPS/ToF exist. The ESP32 must
+#               signal Wi-Fi link-loss too (DESIGN.md §8).
 
 # save

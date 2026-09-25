@@ -1,3 +1,0 @@
-[console_scripts]
-kogane-base = kogane_base.main:main
-kogane-cv = kogane_base.vision.demo:main

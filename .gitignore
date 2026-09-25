@@ -1,0 +1,33 @@
+# --- ESP-IDF generated config (can hold secrets) ---
+# `sdkconfig` is ignored because it carries Wi-Fi credentials (SSID / password).
+# `sdkconfig.defaults` is intentionally NOT ignored: it is the checked-in
+# project baseline that `sdkconfig` is generated from.
+# Bare patterns so they apply to every IDF project in the tree
+# (firmware/companion-esp32s3, firmware/mmwave-node-esp32c3, ...).
+sdkconfig
+sdkconfig.old
+
+# --- ESP-IDF build output ---
+firmware/*/build/
+firmware/companion-esp32s3/managed_components/
+firmware/companion-esp32s3/eim_config.toml
+
+# --- Python artifacts ---
+__pycache__/
+*.py[cod]
+firmware/base-station/.venv/
+*.egg-info/
+firmware/base-station/base.log
+firmware/base-station/base.err
+firmware/base-station/.pytest_cache/
+firmware/base-station/.pytest-sandbox/
+
+# --- OS / editor noise ---
+.DS_Store
+Thumbs.db
+.vscode/
+pcb/FC/FC-backups/
+pcb/FC/*.kicad_prl
+pcb/FC/fp-info-cache
+pcb/FC/jlcpcb/project.db
+pcb/FC/~*.lck

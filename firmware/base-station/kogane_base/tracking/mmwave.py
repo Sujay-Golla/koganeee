@@ -33,6 +33,25 @@ def node_frame_to_room(node_id: int, x_mm: int, y_mm: int) -> tuple[float, float
     return rx, ry
 
 
+def room_to_node_frame(node_id: int, x_m: float, y_m: float) -> tuple[int, int]:
+    """Exact inverse of `node_frame_to_room`: room metres -> that node's sensor frame, mm.
+
+    Only used to *generate* detections (the mmWave simulator synthesises a room-frame path
+    and has to express it the way a node at that pose would have reported it). Rounds to
+    whole millimetres, which is the radar's own resolution.
+    """
+    pose = CONFIG.node_poses.get(node_id)
+    if pose is None:
+        return round(x_m * 1000.0), round(y_m * 1000.0)
+    ox, oy, yaw_deg = pose
+    a = math.radians(yaw_deg)
+    dx = x_m - ox
+    dy = y_m - oy
+    x = dx * math.cos(a) + dy * math.sin(a)
+    y = -dx * math.sin(a) + dy * math.cos(a)
+    return round(x * 1000.0), round(y * 1000.0)
+
+
 def detections_from_payload(node_id: int, payload: bytes) -> list[Detection]:
     dets: list[Detection] = []
     for x_mm, y_mm, speed_cms, _res in parse_mmwave(payload):

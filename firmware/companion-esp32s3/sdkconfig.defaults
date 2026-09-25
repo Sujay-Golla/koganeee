@@ -9,3 +9,48 @@ CONFIG_ESP_TASK_WDT_EN=y
 CONFIG_ESP_WIFI_ENABLED=y
 # Larger main task stack for bring-up logging
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=6144
+# FT232 is TX/RX/GND only — do not pulse DTR
+CONFIG_ESPTOOLPY_BEFORE_NORESET=y
+
+# ---- Console: native USB (USB-Serial-JTAG), not UART0 ----
+# The module's RXD0 castellation is physically destroyed, so the UART path is
+# not usable for flashing anyway. The board enumerates as VID_303A PID_1001 and
+# flashes + logs over native USB (verified on COM11, full boot log captured).
+#
+# ESP_CONSOLE_UART_DEFAULT / _UART_CUSTOM / _USB_CDC / _NONE are members of the
+# same Kconfig choice as the line below, so selecting USB_SERIAL_JTAG here makes
+# UART0 non-primary automatically. They are deliberately NOT written out as
+# "is not set" lines: kconfgen parses that form as an explicit n, which fights
+# the choice and produces a spurious NOTE at parse time.
+CONFIG_ESP_CONSOLE_USB_SERIAL_JTAG=y
+# No secondary console: USB-Serial-JTAG is already the primary.
+CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
+
+# ---- Owner of GPIO43/44 (nets ESP32-TX/ESP32-RX -> STM32F722 PA9/PA10) ----
+# With the console on USB, GPIO43/44 are no longer needed for logging, so
+# handing them to the FC link would NOT cost us the boot log any more. The old
+# comment here claimed CONFIG_ESP_CONSOLE_NONE=y was required and that there was
+# no fallback log path — that is no longer true.
+#
+# We still keep the pins assigned to the console, for a different reason:
+# GPIO44 (pad 36, RXD0) is physically dead, so the FC link could transmit MSP
+# but never receive MAVLink. A half-open link is worse than an inert one.
+#
+# The FC link is blocked pending a rework wire from STM32 PA10 to module pad 15
+# (IO3, currently unconnected). After that rework: set CONFIG_KGN_FC_UART_RX=3
+# and CONFIG_KGN_PINS_OWNER_FC_LINK=y. See PINMAP.md.
+CONFIG_KGN_PINS_OWNER_CONSOLE=y
+
+# ---- Partition table: custom, 3 MB app ----
+# The stock single-app table gives the app 1 MB and the image was already 83%
+# full before the camera went in. The module has 16 MB of flash, of which the
+# stock table used ~3 MB, so `factory` is now 3 MB and nvs/phy_init keep their
+# original offsets and sizes (so nothing in nvs moves). Full rationale, including
+# why there are no OTA slots and no storage partition, is in partitions.csv.
+#
+# PARTITION_TABLE_SINGLE_APP / _SINGLE_APP_LARGE / _TWO_OTA / _TWO_OTA_LARGE are
+# members of the same Kconfig choice as the line below, so selecting CUSTOM here
+# deselects them automatically — same reasoning as the console block above, they
+# are deliberately not written out as "is not set" lines.
+CONFIG_PARTITION_TABLE_CUSTOM=y
+CONFIG_PARTITION_TABLE_CUSTOM_FILENAME="partitions.csv"

@@ -1,0 +1,19 @@
+# Model weights are fetched on demand, not committed.
+#   yolov8n-pose.pt            ultralytics auto-downloads it on first pose run (~6.5 MB)
+#   models/*.onnx              kogane_base.vision.models fetches YuNet/SFace (~227 KB + ~37 MB)
+yolov8n-pose.pt
+models/*.onnx
+
+# Face embeddings are biometric personal data. Never commit the enrollment DB.
+models/face_db.json
+*face_db.json
+
+# Camera calibration is per-installation, not portable between rooms.
+calib/
+
+# Throwaway verification scripts and their output.
+_smoke_*.py
+_smoke_*.mp4
+_smoke_*.json
+_*_out.txt
+_cli*.txt

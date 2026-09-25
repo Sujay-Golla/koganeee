@@ -1,0 +1,53 @@
+# KOGANE companion (ESP32-S3-WROOM-1-N16R8) — custom partition table.
+#
+# Why this file exists: the app outgrew the stock single-app layout. At 872,288
+# bytes against the default 1 MB `factory` partition the image was 83% full, and
+# the esp32-camera driver plus esp_http_server push it further. The module has
+# 16 MB of flash (CONFIG_ESPTOOLPY_FLASHSIZE_16MB=y) and the stock table used
+# barely 3 MB of it, so the app gets 3 MB and the headroom problem goes away.
+#
+# Layout (partition table itself lives at 0x8000, 0x1000 long, CONFIG_PARTITION_TABLE_OFFSET):
+#
+#   offset     size            name       notes
+#   0x000000   0x008000 (32K)  —          2nd stage bootloader
+#   0x008000   0x001000 (4K)   —          this partition table
+#   0x009000   0x006000 (24K)  nvs        UNMOVED from the stock layout
+#   0x00f000   0x001000 (4K)   phy_init   UNMOVED from the stock layout
+#   0x010000   0x300000 (3M)   factory    app — was 0x100000 (1M)
+#   0x310000   —               unallocated (~12.9 MB free to the end of flash)
+#
+# `nvs` and `phy_init` keep their stock offsets AND their stock sizes on purpose.
+# Only the app partition grew, and it grew *downstream* of both, so the Wi-Fi
+# calibration and PHY data already in flash stay where the new table says they
+# are and survive the reflash. Had nvs moved, the first boot after flashing
+# would have found an unformatted region and re-initialised it (app_main already
+# handles ESP_ERR_NVS_NO_FREE_PAGES), losing any stored state silently.
+#
+# Alignment: app partitions must start on a 64 KB (0x10000) boundary. `factory`
+# starts at 0x10000 and is 0x300000 long, both multiples of 0x10000, so the next
+# free offset (0x310000) is also 64 KB aligned and a future app-type partition
+# can be added there without shuffling anything.
+#
+# Single `factory` app, no OTA slots — deliberate. There is no OTA mechanism in
+# this firmware: no `esp_https_ota`, no update transport in PROTOCOL.md, and the
+# board is flashed over native USB-Serial-JTAG (the UART RXD0 castellation is
+# destroyed, see PINMAP.md), so a second app slot plus otadata would cost 3 MB
+# for a path nothing can use. Adding OTA later is a table change and a reflash,
+# which is exactly the situation we are already in, and the 12.9 MB of
+# unallocated flash after `factory` means the app partition would not have to
+# move to make room for ota_1.
+#
+# No `storage` (SPIFFS/LittleFS/FAT) partition — also deliberate, not an
+# oversight. Nothing on this board has a file to keep: camera frames are
+# captured into PSRAM and streamed straight out over HTTP as MJPEG (the base
+# station is the thing that records, see firmware/shared/PROTOCOL.md §3), screen
+# content arrives over UDP as SCREEN_FRAME tiles and is rendered as it lands
+# with no reassembly buffer let alone a cache, and the only persistent settings
+# (Wi-Fi calibration, PHY data) already live in `nvs`. A filesystem added "just
+# in case" would be an unmounted partition and a wear-levelling layer nobody
+# reads. Add one when there is a concrete file to put in it.
+#
+# Name,   Type, SubType, Offset,   Size,     Flags
+nvs,      data, nvs,     0x9000,   0x6000,
+phy_init, data, phy,     0xf000,   0x1000,
+factory,  app,  factory, 0x10000,  0x300000,

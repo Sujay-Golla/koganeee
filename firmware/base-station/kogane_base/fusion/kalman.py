@@ -58,6 +58,15 @@ class PositionFilter:
         self.P = (np.eye(4) - K @ H) @ self.P
 
     @property
+    def initialised(self) -> bool:
+        """True once at least one measurement has seeded the state.
+
+        Public accessor for what used to be read as `filter._init` from main.py.
+        `_init` is kept as the backing attribute so existing code keeps working.
+        """
+        return self._init
+
+    @property
     def position(self) -> tuple[float, float]:
         return float(self.x[0]), float(self.x[1])
 

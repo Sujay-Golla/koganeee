@@ -1,5 +1,16 @@
 ## ESP-IDF managed components for the Kogane companion.
-## OV2640 camera driver is optional at first bring-up; uncomment to enable camera_dvp.
+## Pulled from the Espressif component registry on first build; the resolved
+## versions are pinned in ../dependencies.lock, which IS committed.
 dependencies:
   idf: ">=5.0"
-  # espressif/esp32-camera: "^2.0.0"   # TODO(kogane): enable for OV2640 MJPEG stream
+  ## OV2640 DVP driver for main/camera_dvp.c. Pinned to an exact version rather
+  ## than a "^2" range: this is the one component whose behaviour we cannot test
+  ## without the hardware in front of us, so the build must not silently move
+  ## under us between checkouts.
+  ##
+  ## Not 2.1.1. That version is yanked upstream ("breaks under IDF < 5.1") and,
+  ## more to the point here, it does not declare esp_driver_ledc in its own
+  ## REQUIRES even though its public esp_camera.h includes driver/ledc.h. IDF
+  ## 6.1 enforces that and the component fails to compile. 2.1.7 declares its
+  ## dependencies properly and builds clean against IDF 6.1.
+  espressif/esp32-camera: "2.1.7"
