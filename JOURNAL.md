@@ -1,5 +1,5 @@
-<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/614bf696-ff50-4301-af45-970ccfc70b6b" /># Journal for building Kogane
-Total number of hours: 48 (so far)
+# Journal for building Kogane
+Total number of hours: 88
 
 ## Oct 18 - Putting everything together (and crashing out)
 ## Hours spent: 18
