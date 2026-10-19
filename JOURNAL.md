@@ -101,6 +101,8 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 - Realized I needed resistor for enable, so brought it from MyFab and soldered it
 - Many hours of holding SW1 and SW3 and debugging with Claude, it finally flashed
 
+https://photos.app.goo.gl/La4t4pvfmcqCWJV5A
+
 ## Sep 16 - AliExpress iron incident
 ### Hours spent: 2
 - Unpacked and tried to use soldering iron
@@ -108,6 +110,8 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 - Screen wasn't moving so I thought it was updating but 30 seconds later it turns glowing red
 - Got advice, tried recreating situation and recorded it
 - Submitted return for AliExpress
+
+https://photos.app.goo.gl/rh5TJYfxsHFoqtMu5
 
 ## Sep 4 - Resoldering with better flux and leaded solder, still caused shorting between RX and TX
 ### Hours spent: 2
@@ -124,6 +128,8 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 - Ruined copper pads so had to use PCB #2
 - Used a bad soldering iron but with a good tip and tried agdain and it somewhat worked
 - Still shorted though, so tried installing ESP with WSL instead
+
+https://photos.app.goo.gl/ioqdz2LVB3GNYGWi6
 
 ## Aug 23 - Making gyro work
 ### Hours spent: 2
