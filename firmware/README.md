@@ -1,6 +1,6 @@
 # Kogane firmware
 
-The STM32 runs flight control; the ESP32 handles Wi-Fi and payloads; the laptop runs voice and room mapping. Manual flight uses ELRS radio control. Autonomous following and voice flight commands are not enabled in the demonstrated setup.
+The system architecture is split into three divisions: STM32 (flight control), ESP32 (peripherals and WiFi) and laptop (computation-intensive tasks). 
 
 Demo plans, feature runbooks and the shipping checklist are collected in [Demo/INDEX.md](Demo/INDEX.md).
 
@@ -13,8 +13,6 @@ Demo plans, feature runbooks and the shipping checklist are collected in [Demo/I
 | [mmwave-node-esp32c3](mmwave-node-esp32c3/) | Earlier optional Wi-Fi radar-node implementation | Not used by the current USB-UART radar demo |
 
 ## System pipeline
-
-Voice and mapping run on the laptop. The radio controls flight. Edit the Mermaid blocks below to change the diagrams; dashed lines mark optional paths.
 
 ### Voice assistant
 
@@ -39,8 +37,6 @@ flowchart TB
     APPS -->|"Wi-Fi"| DISPLAY["ESP32 and LCD"]
 ```
 
-Vosk handles the wake word and commands. Tasks are stored locally; weather is fetched online.
-
 ### Room mapping
 
 ```mermaid
@@ -64,8 +60,6 @@ flowchart TB
     MAP --> RECORD["MP4 and CSV export"]
 ```
 
-Radar supplies human positions. The cameras detect people and furniture; placing furniture on the map requires floor calibration.
-
 ### Flight control and telemetry
 
 ```mermaid
@@ -88,10 +82,6 @@ flowchart TB
     ESP -->|"Wi-Fi"| MONITOR["Laptop telemetry"]
     ESP -.->|"Bench test"| SERVO["Servo"]
 ```
-
-The ESP32 receives flight-controller telemetry; flight commands remain blocked. Autonomous following, onboard camera output and screen retraction are future work. The onboard speaker needs a hardware repair.
-
-Remove propellers for flashing and bench checks. USB ports, camera indices and IP addresses below are examples; use the devices actually connected. The physical prototypes include repairs not reflected in the saved PCB.
 
 ## STM32 flight controller
 
@@ -122,7 +112,7 @@ Run `set-target` only for initial setup. The N16R8 module uses 16 MB flash and o
 - First boot: leave all **Kogane Companion → Staged hardware bring-up** switches off.
 - Then enable Wi-Fi, outbound telemetry, LCD and microphone **one stage at a time**. Keep camera, speaker TX and servo boot sweep off for the normal demo.
 - Set `KGN_WIFI_SSID`, `KGN_WIFI_PASS` and `KGN_BASE_IP` locally. The base IP is the laptop's LAN IPv4 from `ipconfig`; use reachable 2.4 GHz Wi-Fi and UDP/5005. Credentials stay in ignored `sdkconfig`.
-- The defaults disable automatic pre-flash reset. Enter download mode manually if needed: **IO0 low during reset**. Normal application boot needs IO0 high. The working board's reversed IO0 strap was repaired; historical instructions to hold SW3 to run the app are obsolete for that repaired board.
+- The defaults disable automatic pre-flash reset. Enter download mode manually if needed: **IO0 low during reset**. Normal application boot needs IO0 high. The working board's reversed IO0 strap was repaired manually, but fix the PCB in future iterations (check README under the pcb directory)
 - The LCD, servo and receiver need the battery-backed 5 V rail. A board with a suspected short must be repaired before powering it.
 
 For optional FC telemetry, select `KGN_PINS_OWNER_FC_LINK`, enable `KGN_BRINGUP_FC_LINK` and retain `KGN_FC_RX_ONLY=y`. Set iNAV UART1 to MAVLink at 115200, MSP off on that UART. ESP32 RX=GPIO43 and TX=GPIO44. Keep the request test off during normal use. See [FC link checks](companion-esp32s3/FC_LINK_CHECK.md) and [pin map](companion-esp32s3/PINMAP.md).
@@ -155,17 +145,3 @@ Replace device **3** and **10.0.0.47** with the actual microphone and ESP32 addr
 - [Room mapping](Demo/ROOM_MAPPING_DEMO.md): two webcams for coverage and an LD2450 via USB-UART for human positions. No ESP32-C3 or stereo calibration is required for this mode. [Object mapping](Demo/OBJECT_MAPPING.md) needs floor calibration for approximate furniture positions.
 
 Models, credentials, calibration, tasks and recordings are local files excluded from Git. A fresh clone needs its own setup. The snapshot passed 741 Python tests and the FC-link C/build checks; first flight and autonomous navigation are not established by those tests.
-
-## Known PCB issues / next revision
-
-| Issue | Required change |
-| --- | --- |
-| IO0 pulled down; EN lacks a dedicated pull-up | Proper boot pull-up/button-to-GND and a defined enable/reset circuit. Physical prototype has hand repairs. |
-| ESP32 native USB missing | Route GPIO19/20 to a protected, labelled connector instead of module-pad bodge wires. |
-| MAX98357A `SD_MODE` grounded | Correct enable/channel-selection wiring; current speaker path is disabled. |
-| Battery ADC PC0 unconnected | Add a scaled, filtered divider and test point. Current displayed pack voltage/cell count is invalid. |
-| F1 specified for 16 V; Q2 gate stress can exceed its ±8 V rating | Redesign/verify the power path for maximum pack voltage, transients and USB/battery switching. Existing protection is present but needs rating review. |
-| Connector mismatch, shared peripheral reset and no LCD readback | Match actual cable parts, add independent reset/readback where needed and improve test access/strain relief. |
-| Stale GPIO labels and stock-target assumptions | Keep schematic labels, firmware pins, 25 MHz clock and motor timer/DMA assignments consistent. |
-
-One repaired board has a **suspected VSYS short**, with no failed component isolated; this is separate from the confirmed design issues. See [PCB notes](../pcb/README.md), [power review](fc-inav/POWER_REVIEW.md) and [battery sensing](fc-inav/BATTERY_SENSE_CHECK.md). Reconcile the BOM and rerun ERC/DRC before ordering a revision.
