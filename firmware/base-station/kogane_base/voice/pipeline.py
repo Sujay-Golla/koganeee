@@ -30,8 +30,8 @@ class VoicePipeline:
         self._running = True
         log.info("voice pipeline started (stub)")
         # TODO(kogane): openWakeWord on mic (from drone AUDIO_MIC), Silero VAD, Deepgram STT,
-        #               intent match against LOCAL_COMMANDS, else Claude; ElevenLabs TTS ->
-        #               AUDIO_TTS to the drone speaker.
+        #               intent match against LOCAL_COMMANDS, else Claude; TTS ->
+        #               laptop speaker (the onboard drone amplifier is held in shutdown).
         while self._running:
             await asyncio.sleep(1.0)
 

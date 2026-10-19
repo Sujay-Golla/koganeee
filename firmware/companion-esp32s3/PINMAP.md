@@ -1,5 +1,20 @@
 # Kogane companion (ESP32-S3-WROOM-1-N16R8) pin map
 
+**Repaired-board update (2026-10-10):** the user reports that the damaged ESP32
+pads were repaired with a replacement module and the ESP32 appears on COM13.
+The pad-to-net map below still describes the PCB copper, but the old damage
+statements describe the previous module. Both UART traces now pass continuity
+and STM32-to-ESP32 MAVLink reception is bench-verified (see the UART section).
+Other peripherals have separate bring-up records; see `BRINGUP.md`.
+
+**Speaker update (2026-10-17, HW-VERIFIED):** U11 pin 4 `SD_MODE` is connected
+to GND in the PCB layout, and continuity to GND was measured on the repaired
+board. The MAX98357A datasheet specifies that LOW on this pin forces shutdown.
+The speaker measures 3 ohms, GPIO38 has continuity to U11 DIN, and the ESP32
+logs I2S TX/RX startup and the self-test request, but J6 remains silent. The
+onboard speaker path needs hardware rework or an external amplifier. Never
+connect U11 pin 4 to 3.3 V while its ground connection remains intact.
+
 **Source of truth.** Every row below is derived from the PCB netlist — the U4
 pad -> net map read out of `pcb/FC/jlcpcb/gerber/FC-CuTop.gbr`. The copper is
 authoritative. Kconfig defaults in `main/Kconfig.projbuild` must be checked
@@ -13,20 +28,14 @@ against the netlist:
 - The FC UART was assigned to GPIO17/18. Those pads are camera data nets
   **D6/D7**.
 - The servo was assigned to GPIO21. That pad is camera **HSYNC** (`HS`).
-- **The two I2S data pins were swapped, and it cooked the amplifier.**
+- **The two I2S data pins were swapped.**
   `CONFIG_KGN_I2S_DOUT` was 40 and `CONFIG_KGN_I2S_DIN` was 38 — exactly
   inverted. The correct assignment is **DOUT = 38** (to U11, the MAX98357A) and
-  **DIN = 40** (from the INMP441 on J2). This is the most damaging of the three
-  and the only one with a thermal consequence: with DOUT on the wrong pin,
-  nothing drove U11 pin 1, so the amp's data input floated — but `audio_i2s.c`
-  enabled the I2S TX channel at boot and deliberately never disabled it (BCLK/WS
-  came from the TX side and the microphone needed them). A class-D amp that sees
-  valid clocks does not enter its no-clock shutdown, so U11 stayed on and
-  amplified noise into a 4 ohm load off 3.3V. Reported symptom: the board getting
-  **really hot near SW3** on USB power alone with a speaker plugged into J6. The
-  same swap also configured GPIO40 as an I2S output into the microphone's data
-  output, so with the mic connected two drivers fought over that net. See the
-  Audio section below; the speaker path is now gated off by default.
+  **DIN = 40** (from the INMP441 on J2). The swap left U11's DIN without the
+  intended signal and drove GPIO40 against the microphone's data output.
+  Earlier notes attributed heating near SW3 to the amplifier, but U11 pin 4
+  is tied to GND, holding it in shutdown. The cause of that earlier heat is
+  unconfirmed. See the Audio section below.
 
 All three looked fine in isolation and all three were wrong. If you add a driver,
 find the pin here first. Reading a net *name* as if it described the ESP32's role
@@ -41,20 +50,20 @@ internally. The PCB leaves pads 28/29/30 (IO35/36/37) unconnected, which makes
 them look like free GPIO on the board. They are not free. Using them corrupts
 PSRAM access.
 
-### RXD0 castellation is destroyed
+### Repaired UART pads and direction correction (2026-10-17)
 
-Module pad 36 (GPIO44, net `ESP32-RX`, from STM32 PA10) is physically broken on
-the current board. Consequences:
+The destroyed pad 36 belonged to the old module. Both replacement-module
+connections now pass continuity: STM32 U1 PA9/pin 42 to U4 GPIO43/pad 37,
+and STM32 PA10/pin 43 to U4 GPIO44/pad 36. No IO3 bodge is needed.
 
-- The board flashes and logs over **native USB** (USB-Serial-JTAG,
-  VID_303A / PID_1001, enumerated on COM11, full boot log captured) via a USB
-  breakout hand-soldered to module pads 13/14 — see "USB bodge wire on pads
-  13/14" below. The IDF console is configured for USB-Serial-JTAG, not UART0.
-- The FC link can transmit to the STM32 but **cannot receive**, so it stays
-  disabled: `CONFIG_KGN_PINS_OWNER_CONSOLE=y`.
-- **Pending rework:** wire STM32 **PA10 -> module pad 15 (IO3)**, which is
-  currently unconnected. After that rework, set `CONFIG_KGN_FC_UART_RX=3` and
-  `CONFIG_KGN_PINS_OWNER_FC_LINK=y`.
+PA9 is STM32 USART1 TX and PA10 is RX. The ESP32 therefore needs **RX=43,
+TX=44**, using its GPIO matrix. Previous firmware defaults and direction
+arrows were reversed. Net labels follow the module's default UART0 functions.
+
+The first diagnostic keeps TX GPIO44 as an input and blocks setpoints with
+`CONFIG_KGN_FC_RX_ONLY=y`. Logs stay on native USB COM13. Reception is now
+bench-verified: heartbeat/attitude counters increase with bad_crc=0.
+Reverse transmission remains untested; see `FC_LINK_CHECK.md`.
 
 ## Pad / GPIO / net table
 
@@ -62,8 +71,8 @@ the current board. Consequences:
 
 | Pad | GPIO | Net | Function |
 |-----|------|-----|----------|
-| 37 | 43 (TXD0) | `ESP32-TX` | ESP32 TX -> STM32F722 PA9 |
-| 36 | 44 (RXD0) | `ESP32-RX` | ESP32 RX <- STM32F722 PA10 — **pad destroyed** |
+| 37 | 43 | `ESP32-TX` | **ESP32 RX** <- STM32F722 PA9 (USART1 TX) |
+| 36 | 44 | `ESP32-RX` | **ESP32 TX** -> STM32F722 PA10 (USART1 RX); input during RX-only test |
 
 ### Servo
 
@@ -125,6 +134,7 @@ and the **INMP441** microphone breakout on **J2 + J3**.
 | U11 pin 16 `BCLK` | `BCLK(38)` | U4 pad 32 = GPIO39 |
 | U11 pin 14 `LRCLK` | `WS(39)` | U4 pad 34 = GPIO41 |
 | U11 pin 7 `VDD` | `+3.3V` | board 3V3 rail |
+| U11 pin 4 `SD_MODE` | `GND` | **Permanent shutdown in this PCB layout** |
 | U11 pins 9 / 10 `OUTP` / `OUTN` | `OUT+` / `OUT-` | **J6**, silkscreen `SPEAKER` |
 
 `CONFIG_KGN_I2S_DOUT = 38`.
@@ -163,8 +173,9 @@ instead of a floating input, and brings the **RX channel up as the clock master*
 so the microphone still gets BCLK/WS. Playback traffic is still accepted and
 discarded, and a `SELFTEST` command logs that the path is disabled.
 
-Turn the gate on once GPIO38 has been confirmed to reach U11 pin 1, then fire the
-tone deliberately with `AUDIO_TTS` fmt 2 cmd 3.
+Turning the TX gate on does not override U11's grounded `SD_MODE` input.
+After repairing the amplifier enable or connecting an external amplifier, fire
+the tone deliberately with `AUDIO_TTS` fmt 2 cmd 3.
 
 Note that nothing about either part can be settled from the host side in
 firmware. I2S has no readback: an absent mic, a miswired mic and a working mic

@@ -7,14 +7,8 @@
  *
  * Honesty rule for this module: every field in drone_state is either measured or
  * flagged invalid in the `flags` bitmask (KGN_DS_F_*, defined in kogane_msg.h).
- * We do NOT emit zeroed position and yaw as if they were measurements. On this
- * board the FC link cannot receive (PINMAP.md: RXD0 castellation destroyed), so
- * position, yaw, battery and armed state are all genuinely unknown and stay
- * flagged invalid. The only real numbers here are uptime and Wi-Fi RSSI.
- *
- * When the PA10 -> IO3 rework lands and link_fc.c starts parsing MAVLink, the
- * fill below is where the real values get spliced in — set the matching
- * KGN_DS_F_* bit at the same time as the field.
+ * Fresh CRC-checked FC heartbeat, yaw and battery fields come from link_fc.c.
+ * Missing/expired fields stay invalid. Position is not provided by this path.
  */
 #include <string.h>
 #include "freertos/FreeRTOS.h"
@@ -25,6 +19,7 @@
 #include "telemetry.h"
 #include "wifi_udp.h"
 #include "kogane_msg.h"
+#include "link_fc.h"
 
 static const char *TAG = "telemetry";
 
@@ -69,26 +64,14 @@ static void tlm_send(uint8_t msg_type, const void *payload, uint16_t len)
 
 static void send_drone_state(void)
 {
-    kgn_drone_state_t st = { 0 };
-    uint8_t flags = 0;
-
-    /* x/y/z/yaw: no FC link, no vision pose on this board. Left zero AND left
-     * flagged invalid. TODO(kogane): fill from MAVLink LOCAL_POSITION_NED /
-     * ATTITUDE once link_fc.c can receive. */
-
-    /* batt_mv: no sensed rail into the ESP32 on this PCB revision, and the FC's
-     * SYS_STATUS voltage is unreachable for the same reason as above. */
+    kgn_drone_state_t st = link_fc_state();
 
     int rssi;
     if (wifi_udp_get_rssi(&rssi)) {
         st.link_q = kgn_rssi_to_link_q(rssi);
-        flags |= KGN_DS_F_LINKQ_VALID;
+        st.flags |= KGN_DS_F_LINKQ_VALID;
     }
 
-    /* KGN_DS_F_FC_LINK_UP / KGN_DS_F_ARMED stay clear: link_fc.c is inert while
-     * CONFIG_KGN_PINS_OWNER_CONSOLE is selected. */
-
-    st.flags = flags;
     tlm_send(KGN_DRONE_STATE, &st, sizeof(st));
 }
 

@@ -1,7 +1,7 @@
 /*
  * KOGANE companion (ESP32-S3) — app entry.
- * Brings up Wi-Fi, then starts the payload + link tasks. Each task lives in its
- * own module and is a skeleton; see the corresponding .c file.
+ * Staged bring-up: each subsystem has a default-off Kconfig switch so the
+ * repaired board can be checked one peripheral at a time.
  */
 #include <string.h>
 #include "freertos/FreeRTOS.h"
@@ -29,26 +29,33 @@ void app_main(void)
         ESP_ERROR_CHECK(nvs_flash_init());
     }
 
-    // Networking first: the control + telemetry loops depend on UDP being up.
+    // Keep the first flash to boot + NVS only. Enable one stage at a time.
+#if defined(CONFIG_KGN_BRINGUP_WIFI)
     wifi_udp_start();
+#endif
 
-    // FC bridge: MAVLink telemetry in, MSP override out (UART1).
+#if defined(CONFIG_KGN_BRINGUP_FC_LINK)
     link_fc_start();
+#endif
 
-    // Payload subsystems. Every one of these fails soft: a missing or unresponsive
-    // peripheral logs and returns, it does not abort boot or stall the link.
-    // Order matters only in that the display reads servo state for its status
-    // screen, so the servo is brought up first.
+    // Servo precedes display because the status page reads servo state.
+#if defined(CONFIG_KGN_BRINGUP_SERVO)
     servo_ledc_start();
+#endif
+#if defined(CONFIG_KGN_BRINGUP_AUDIO)
     audio_i2s_start();
+#endif
+#if defined(CONFIG_KGN_BRINGUP_DISPLAY)
     display_spi_start();
+#endif
+#if defined(CONFIG_KGN_BRINGUP_CAMERA)
     camera_dvp_start();
+#endif
 
-    // Outbound telemetry last: it only needs wifi_udp_send(), which parks until
-    // the socket exists, and starting it after the peripherals means the first
-    // DRONE_STATE already reflects a settled system.
+#if defined(CONFIG_KGN_BRINGUP_TELEMETRY)
     telemetry_start();
+#endif
 
-    ESP_LOGI(TAG, "all subsystems started");
+    ESP_LOGI(TAG, "selected bring-up subsystems started");
     // app_main returns; FreeRTOS keeps the created tasks running.
 }

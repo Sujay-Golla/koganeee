@@ -43,9 +43,8 @@ typedef enum { KGN_ROLE_BASE = 0, KGN_ROLE_DRONE = 1, KGN_ROLE_NODE = 2 } kgn_ro
  * the bytes, which will be zero. Sending zeros with the bit clear is not a
  * measurement of zero.
  *
- * Today, on this board: POS and YAW are always invalid (the FC link cannot
- * receive — PINMAP.md, destroyed RXD0 pad), BATT is always invalid (no sensed
- * rail), LINK_Q is valid whenever Wi-Fi is associated (carries RSSI, see below).
+ * This bridge exports fresh FC heartbeat/armed, yaw and voltage data. Position
+ * remains invalid. LINK_Q is Wi-Fi RSSI, independent of FC reception.
  */
 #define KGN_DS_F_POS_VALID    (1u << 0)  /* x_cm, y_cm, z_cm are real */
 #define KGN_DS_F_YAW_VALID    (1u << 1)  /* yaw_cd is real */

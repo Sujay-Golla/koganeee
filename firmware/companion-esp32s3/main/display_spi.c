@@ -242,9 +242,12 @@ static void lcd_prepare(void)
 {
     gpio_config_t io = {
         .pin_bit_mask = (1ULL << CONFIG_KGN_LCD_BL),
-        .mode = GPIO_MODE_OUTPUT,
+        /* Keep input enabled so the boot log can read the physical pad. */
+        .mode = GPIO_MODE_INPUT_OUTPUT,
     };
-    gpio_config(&io);
+    esp_err_t err = gpio_config(&io);
+    ESP_LOGI(TAG, "BL GPIO%d config: %s", CONFIG_KGN_LCD_BL,
+             esp_err_to_name(err));
 
     /* Backlight off during init so a garbage first frame is never visible. */
 #if CONFIG_KGN_LCD_BL_ACTIVE_LOW
@@ -259,10 +262,15 @@ static void lcd_prepare(void)
 static void lcd_backlight_on(void)
 {
 #if CONFIG_KGN_LCD_BL_ACTIVE_LOW
-    gpio_set_level(CONFIG_KGN_LCD_BL, 0);
+    const int on_level = 0;
 #else
-    gpio_set_level(CONFIG_KGN_LCD_BL, 1);
+    const int on_level = 1;
 #endif
+    esp_err_t err = gpio_set_level(CONFIG_KGN_LCD_BL, on_level);
+    vTaskDelay(pdMS_TO_TICKS(2));
+    ESP_LOGI(TAG, "BL GPIO%d drive=%d set=%s pad_readback=%d",
+             CONFIG_KGN_LCD_BL, on_level, esp_err_to_name(err),
+             gpio_get_level(CONFIG_KGN_LCD_BL));
 }
 
 static esp_err_t lcd_init(void)

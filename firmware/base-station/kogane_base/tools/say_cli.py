@@ -1,12 +1,14 @@
-"""`kogane-say` — speak text out of the drone's speaker.
+"""`kogane-say` — speak text through the laptop's default speaker.
 
 Windows SAPI renders the text to a 16 kHz mono WAV (the exact format `fmt = 1` fixes on the
-wire, so nothing is resampled), then it is streamed as AUDIO_TTS chunks paced to real time.
+wire, so nothing is resampled). The normal path plays that WAV locally. `--drone`
+keeps the old AUDIO_TTS path available if the drone amplifier is repaired.
 No pip install, no cloud key, no API quota.
 
     kogane-say "hello, I am kogane"
     kogane-say "following you now" --voice Zira --rate 2
-    kogane-say "testing" --keep out.wav --screen
+    kogane-say "testing" --keep out.wav
+    kogane-say "testing" --drone --host 192.168.1.123
     kogane-say --list-voices
 
 `--screen` is the demo flourish: put the same words on the panel while they are spoken.
@@ -39,7 +41,7 @@ def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(
         prog="kogane-say",
         formatter_class=argparse.RawDescriptionHelpFormatter,
-        description="Synthesise speech with Windows SAPI and play it on the drone speaker.",
+        description="Synthesise speech with Windows SAPI and play it on this laptop.",
         epilog="examples:\n"
                "  kogane-say \"hello, I am kogane\"\n"
                "  kogane-say \"following you now\" --voice Zira --rate 2 --screen\n"
@@ -59,7 +61,9 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--keep", metavar="OUT.WAV",
                     help="also keep the synthesised WAV at this path")
     ap.add_argument("--no-send", action="store_true",
-                    help="synthesise only; do not touch the network")
+                    help="synthesise only; do not play or use the network")
+    ap.add_argument("--drone", action="store_true",
+                    help="send audio to the drone instead of the laptop speaker")
     ap.add_argument("--screen", action="store_true",
                     help="also show the text on the drone's panel while it is spoken")
     ap.add_argument("--chunk-ms", type=float, default=CONFIG.audio_chunk_ms,
@@ -140,6 +144,15 @@ def main(argv: list[str] | None = None) -> int:
         if args.no_send:
             return 0
 
+        if not args.drone:
+            if args.screen:
+                dest = f"{args.host}:{args.port}"
+                with SocketSink(args.host, args.port) as sink:
+                    _push_screen(sink, text, dest)
+            _play_local(wav_path)
+            print(f"   played on laptop: {text!r}")
+            return 0
+
         dest = f"{args.host}:{args.port}"
         with SocketSink(args.host, args.port) as sink:
             if args.screen:
@@ -166,6 +179,13 @@ def main(argv: list[str] | None = None) -> int:
                 os.unlink(tmp_path)
             except OSError:
                 pass
+
+
+def _play_local(wav_path: str) -> None:
+    if sys.platform != "win32":
+        raise RuntimeError("laptop speaker playback currently requires Windows")
+    import winsound
+    winsound.PlaySound(wav_path, winsound.SND_FILENAME)
 
 
 def _push_screen(sink, text: str, dest: str) -> None:

@@ -1,0 +1,5 @@
+# Preserve firmware images byte for byte, including their published checksums.
+firmware/fc-inav/*.hex -text whitespace=cr-at-eol
+
+# A blank context line in a unified patch contains one intentional space.
+*.patch whitespace=-blank-at-eol

@@ -1,7 +1,10 @@
-# KOGANE FC — iNAV CLI config (paste into the iNAV Configurator CLI, then `save`)
+# KOGANE FC — design reference, NOT a paste-ready iNAV CLI script.
+# The `resource` lines describe desired pin assignments; this iNAV build's
+# `resource` command only displays pin use. Change target.h and rebuild for
+# UART pin corrections. Restore live settings from a real `diff all` backup.
 #
 # Baseline config for the custom STM32F722 board. Pins per hardware/DESIGN.md §5.
-# Lines are order-independent iNAV CLI commands. Review every TODO before flying.
+# Not all lines are accepted by iNAV CLI. Review every TODO before flying.
 # Generated as a hand-written baseline, not dumped from a live FC.
 
 # ---- resources: repoint to Kogane pins (only needed on a generic stock target) ----

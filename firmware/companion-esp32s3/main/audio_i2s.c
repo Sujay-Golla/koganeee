@@ -55,17 +55,13 @@
  *
  * CONFIG_KGN_AUDIO_TX_ENABLE gates the whole speaker path and defaults to n.
  *
- * The bug it answers: KGN_I2S_DOUT and KGN_I2S_DIN were swapped (40/38 instead of
- * 38/40), so nothing ever drove U11 pin 1 and the amplifier's data input floated.
- * This file used to enable the TX channel at boot and deliberately never disable
- * it, because BCLK/WS came from the TX side and stopping them would have stopped
- * the mic. So the clocks kept running into a MAX98357A with a floating DIN. A
- * class-D amp that sees valid BCLK/LRCLK does not enter its no-clock shutdown: it
- * stayed enabled and amplified noise into a 4 ohm load off 3.3V. The reported
- * symptom was the board getting hot near SW3 on USB power alone with a speaker on
- * J6. The pins are now correct, but "a clocked amp with a data line that might
- * not be connected" is a shape worth removing rather than fixing once, so the
- * speaker no longer comes up on its own.
+ * KGN_I2S_DOUT and KGN_I2S_DIN were originally swapped (40/38 instead of
+ * 38/40), so nothing drove U11 pin 1. The TX gate keeps the data line defined
+ * during staged bring-up. A later PCB and bench check found U11 pin 4 SD_MODE
+ * tied to GND, holding the amplifier in shutdown regardless of I2S data.
+ * The old hypothesis that floating DIN caused U11 to overheat near SW3 is
+ * therefore unlikely. J6 cannot play until SD_MODE is isolated from GND and
+ * enabled, or an external I2S amplifier is connected.
  *
  * What the gate does when it is OFF (the default):
  *   - No TX channel is allocated at all. i2s_new_channel() is called with a NULL

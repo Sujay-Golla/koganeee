@@ -104,12 +104,30 @@ def test_battery_is_only_taken_when_valid():
     assert bs.screen_state().batt_mv == 11400
 
 
-def test_drone_state_position_still_updates_regardless_of_flags():
-    """Unchanged existing behaviour; only the new readout fields are flag-gated."""
+def test_heading_only_state_does_not_overwrite_position():
     bs = BaseStation()
+    initial = bs.drone_xy
     bs._on_frame(_frame(p.MsgType.DRONE_STATE,
                         p.pack_drone_state(150, -250, 0, 0, 0, 0, 0)), ("1.2.3.4", 5005))
+    assert bs.drone_xy == initial
+    bs._on_frame(_frame(p.MsgType.DRONE_STATE,
+                        p.pack_drone_state(150, -250, 0, 0, 0, p.DS_F_POS_VALID, 0)),
+                 ("1.2.3.4", 5005))
     assert bs.drone_xy == pytest.approx((1.5, -2.5))
+
+
+def test_expired_telemetry_clears_battery_and_link_readout():
+    bs = BaseStation()
+    flags = p.DS_F_BATT_VALID | p.DS_F_LINKQ_VALID
+    bs._on_frame(_frame(p.MsgType.DRONE_STATE,
+                        p.pack_drone_state(0, 0, 0, 0, 4980, flags, 90)),
+                 ("1.2.3.4", 5005))
+    assert bs.screen_state().batt_mv == 4980
+    bs._on_frame(_frame(p.MsgType.DRONE_STATE,
+                        p.pack_drone_state(0, 0, 0, 0, 0, 0, 0)),
+                 ("1.2.3.4", 5005))
+    assert bs.screen_state().batt_mv is None
+    assert bs.screen_state().link_q is None
 
 
 # ---- readout snapshot ---------------------------------------------------

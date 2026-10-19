@@ -60,24 +60,25 @@ data and its bytes are zero — that is not a measurement of zero.**
 | 1 | `YAW_VALID` | `yaw_cd` is real |
 | 2 | `BATT_VALID` | `batt_mv` is real |
 | 3 | `LINKQ_VALID` | `link_q` is real |
-| 4 | `FC_LINK_UP` | companion is exchanging data with the flight controller |
+| 4 | `FC_LINK_UP` | companion received an FC heartbeat within 3 seconds; does not imply control transmission |
 | 5 | `ARMED` | FC reports armed (implies `FC_LINK_UP`) |
 | 6-7 | — | reserved, must be 0 |
 
 `link_q` is 0..100, mapped from Wi-Fi RSSI over the range -95 dBm -> 1 and
 -35 dBm -> 100 (the value 0 is reserved for "unknown").
 
-> **Current companion behaviour (ESP32-S3, board as built):** only
-> `LINKQ_VALID` is ever set, and only while associated. Position, yaw, battery
-> and armed state are all genuinely unknown because the FC UART cannot receive on
-> this board — see `companion-esp32s3/PINMAP.md`. Uptime in `heartbeat` is real.
+> **Current receive-only bridge:** CRC-checked MAVLink HEARTBEAT sets FC link
+> and armed status for up to 3 seconds. ATTITUDE yaw expires after 1 second;
+> SYS_STATUS voltage expires after 3 seconds (0 or 65535 means unavailable).
+> FC fields are invalid when the heartbeat expires. Position remains invalid.
+> LINKQ_VALID comes from Wi-Fi association/RSSI, and heartbeat uptime is real.
+> Roll/pitch are available in the ESP32 log but are not in this 12-byte payload.
 
 ### `mode_cmd` (0x11) — what the drone actually does with it
 
 The companion records the mode and drives the retractable screen mechanism from
 it. Flight behaviour (arming, takeoff, landing, docking) is **not** implemented
-and is blocked on the FC link rework; the companion deliberately does not send
-one-way arm commands it cannot confirm.
+and remains disabled while the FC link is tested in receive-only mode.
 
 | mode | screen mechanism | flight action |
 |------|------------------|---------------|

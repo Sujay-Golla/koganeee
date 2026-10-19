@@ -12,6 +12,13 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+demo = [
+    "vosk==0.3.45",
+    "sounddevice==0.5.6",
+]
+character-voice = [
+    "kokoro-onnx==0.6.1",  # optional local neural mascot voices; models downloaded separately
+]
 # Enable as you flesh out each subsystem.
 voice = [
     "openwakeword",
@@ -69,6 +76,8 @@ kogane-mmwave-sim = "kogane_base.tools.mmwave_sim:main"
 kogane-screen = "kogane_base.tools.screen_cli:main"
 kogane-say = "kogane_base.tools.say_cli:main"
 kogane-audio = "kogane_base.tools.audio_cli:main"
+kogane-demo = "kogane_base.tools.demo_assistant:main"
+kogane-map = "kogane_base.tools.mapping_demo:main"
 
 [tool.setuptools.packages.find]
 include = ["kogane_base*"]

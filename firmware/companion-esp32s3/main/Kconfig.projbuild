@@ -1,5 +1,64 @@
 menu "Kogane Companion"
 
+    menu "Staged hardware bring-up"
+        config KGN_BRINGUP_WIFI
+            bool "Start Wi-Fi and UDP"
+            default n
+            help
+              Enable only after the bare ESP32 boot and power checks pass.
+
+        config KGN_BRINGUP_TELEMETRY
+            bool "Start outbound telemetry"
+            depends on KGN_BRINGUP_WIFI
+            default n
+
+        config KGN_BRINGUP_SERVO
+            bool "Start servo PWM on GPIO42"
+            default n
+            help
+              The servo moves to RETRACTED at boot. Keep the mechanism detached
+              until its angles have been measured. The servo needs the 5 V rail.
+
+        config KGN_SERVO_BOOT_SWEEP_TEST
+            bool "Run a short servo sweep test after boot"
+            depends on KGN_BRINGUP_SERVO
+            default n
+            help
+              Bench test only, with the horn and screen mechanism detached.
+              Sweep from 90 to 100 degrees and back three times, then park at
+              90 degrees. The test is skipped unless RETRACTED_DEG is 90 and
+              DEPLOYED_DEG is 100. Disable this option after bring-up.
+
+        config KGN_BRINGUP_AUDIO
+            bool "Start I2S microphone clocks and capture"
+            default n
+            help
+              Keep KGN_AUDIO_TX_ENABLE disabled until the amplifier data pin
+              has been checked and the previous overheating fault is resolved.
+
+        config KGN_BRINGUP_DISPLAY
+            bool "Start ILI9341 display"
+            default n
+            help
+              The panel needs the battery-backed 5 V rail.
+
+        config KGN_BRINGUP_CAMERA
+            bool "Start OV2640 camera and HTTP server"
+            depends on KGN_BRINGUP_WIFI
+            default n
+            help
+              Add the camera only after the 1.2 V rail and hot-part fault have
+              been checked. The HTTP server has no authentication.
+
+        config KGN_BRINGUP_FC_LINK
+            bool "Start ESP32 to STM32 UART link (bench only)"
+            depends on KGN_PINS_OWNER_FC_LINK
+            default n
+            help
+              Leave off during peripheral bring-up. This is not a flight-ready
+              control path; see the FC bridge requirements and HANDOFF.md.
+    endmenu
+
     config KGN_WIFI_SSID
         string "Wi-Fi SSID"
         default "kogane-net"
@@ -21,35 +80,52 @@ menu "Kogane Companion"
         default 1
 
     config KGN_FC_UART_TX
-        int "FC UART TX GPIO (net ESP32-TX -> STM32 PA9)"
-        default 43
-        help
-          GPIO43 is WROOM-1 pad 37 (TXD0), net ESP32-TX, wired to STM32F722 PA9.
-          This is the only ESP32<->STM32 serial link on the PCB. The pin is shared
-          with the IDF console — see "Owner of the GPIO43/44 UART pins" below.
-
-    config KGN_FC_UART_RX
-        int "FC UART RX GPIO (net ESP32-RX <- STM32 PA10)"
+        int "FC UART TX GPIO (GPIO44 -> STM32 PA10 RX)"
         default 44
         help
-          GPIO44 is WROOM-1 pad 36 (RXD0), net ESP32-RX, wired to STM32F722 PA10.
-          The RXD0 castellation on this module is physically destroyed, so this
-          pin cannot receive. The pending rework is a wire from STM32 PA10 to
-          module pad 15 (IO3, currently unconnected); after that rework this
-          default becomes 3.
-          See PINMAP.md.
+          PCB net ESP32-RX joins U4 pad 36 (GPIO44) to STM32 PA10 (USART1 RX).
+          Route ESP32 TX here using the GPIO matrix. Net labels and the module's
+          default UART0 functions do not describe the needed ESP32 direction.
+
+    config KGN_FC_UART_RX
+        int "FC UART RX GPIO (GPIO43 <- STM32 PA9 TX)"
+        default 43
+        help
+          PCB net ESP32-TX joins U4 pad 37 (GPIO43) to STM32 PA9 (USART1 TX).
+          Route ESP32 RX here using the GPIO matrix. Both repaired UART traces
+          passed continuity checks on 2026-10-17; traffic testing is pending.
+
+    config KGN_FC_RX_ONLY
+        bool "Block FC flight commands (normally receive-only)"
+        depends on KGN_PINS_OWNER_FC_LINK
+        default y
+        help
+          Leave the ESP32 TX pin as an input, discard incoming setpoint requests,
+          and log UART byte counts and CRC-checked MAVLink telemetry every 2 s.
+          This checks the STM32-to-ESP32 direction only. USB logging stays on.
+
+    config KGN_FC_REQUEST_TEST
+        bool "Run a read-only MAVLink request/reply UART bench test"
+        depends on KGN_FC_RX_ONLY && KGN_BRINGUP_FC_LINK
+        default n
+        help
+          Temporarily route TX to GPIO44 after a fresh disarmed FC heartbeat.
+          Send only PARAM_REQUEST_LIST, up to three attempts, and check for
+          a CRC-verified PARAM_VALUE reply from that FC. This request reads
+          information and does not change parameters. TX returns to input
+          after a reply or timeout. Flight commands remain blocked.
 
     choice KGN_UART0_PINS_OWNER
         prompt "Owner of the GPIO43/44 UART pins (shared STM32 link)"
         default KGN_PINS_OWNER_CONSOLE
         help
-          GPIO43/44 are the only ESP32<->STM32 serial link on this PCB. The IDF
-          console now lives on USB-Serial-JTAG, so logging no longer needs these
-          pads — but GPIO44 (RXD0) is physically dead, so the FC link cannot
-          receive on them either. Keep CONSOLE until the PA10 -> IO3 rework lands.
+          GPIO43/44 are the ESP32<->STM32 serial link on this PCB. The IDF
+          console lives on USB-Serial-JTAG. Keep the safe default until the
+          repaired GPIO44 connection is electrically verified and the FC bridge
+          is ready for separate bench testing.
 
         config KGN_PINS_OWNER_CONSOLE
-            bool "IDF console (bring-up logging over the FT232)"
+            bool "Reserve FC link pins (safe bring-up default)"
         config KGN_PINS_OWNER_FC_LINK
             bool "FC link (MSP out / MAVLink in to the STM32)"
     endchoice
@@ -345,14 +421,13 @@ menu "Kogane Companion"
           GPIO driven LOW so the MAX98357A sees a constant zero sample instead of
           a floating input.
 
-          Why the default is off: a wrong or absent data line on a clocked class-D
-          amplifier is not a silent failure, it is a thermal one. The DOUT/DIN
-          swap fixed in KGN_I2S_DOUT left U11's DIN floating while BCLK and LRCLK
-          kept running, and the part happily amplified noise into a 4 ohm load off
-          3.3V until it got hot. The generic lesson is that the speaker should not
-          come up on its own; a human should confirm the wiring and then turn it
-          on. Turn this on (and KGN_AUDIO_BOOT_TONE, or send AUDIO_TTS fmt 2
-          cmd 3) once GPIO38 has been verified to reach U11 pin 1.
+          Hardware warning: this PCB ties U11 pin 4 SD_MODE to GND, forcing the
+          MAX98357A into shutdown. A bench continuity check confirmed it.
+          Enabling this option cannot make J6 play until SD_MODE is physically
+          isolated from GND and enabled, or an external I2S amplifier is used.
+          Earlier notes blamed U11 for heating near SW3, but the grounded
+          shutdown input makes that explanation unlikely. Keep the boot tone
+          off until the hardware path has been repaired and checked.
 
           Clock consequence, which is the reason this needs a knob rather than
           just not calling i2s_channel_enable(): BCLK and WS were generated by the
@@ -375,8 +450,8 @@ menu "Kogane Companion"
         depends on KGN_AUDIO_TX_ENABLE
         help
           Fires the three-note self-test sequence once, a second or so after
-          boot. This is the only thing in the firmware that proves the amp and
-          the speaker work at all.
+          boot. Once the amp's shutdown wiring is repaired, this can prove the
+          amp and speaker work.
 
           DEFAULT CHANGED FROM y TO n. Nothing should drive a speaker
           automatically until a human has confirmed the wiring is right. This

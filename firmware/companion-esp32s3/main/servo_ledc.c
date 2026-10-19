@@ -138,6 +138,30 @@ static void servo_task(void *arg)
     int from = s_current_deg, to = s_current_deg;
     uint32_t steps_total = 0, step = 0;
 
+#if CONFIG_KGN_SERVO_BOOT_SWEEP_TEST
+    if (CONFIG_KGN_SERVO_RETRACTED_DEG == 90 &&
+        CONFIG_KGN_SERVO_DEPLOYED_DEG == 100) {
+        ESP_LOGI(TAG, "boot sweep test: 90 <-> 100 deg, 3 cycles");
+        vTaskDelay(pdMS_TO_TICKS(1000));
+        for (int cycle = 0; cycle < 3; cycle++) {
+            s_target_deg = 100;
+            for (int deg = 91; deg <= 100; deg++) {
+                servo_set_deg(deg);
+                vTaskDelay(pdMS_TO_TICKS(60));
+            }
+            s_target_deg = 90;
+            for (int deg = 99; deg >= 90; deg--) {
+                servo_set_deg(deg);
+                vTaskDelay(pdMS_TO_TICKS(60));
+            }
+            vTaskDelay(pdMS_TO_TICKS(300));
+        }
+        ESP_LOGI(TAG, "boot sweep test complete; parked at 90 deg");
+    } else {
+        ESP_LOGE(TAG, "boot sweep skipped: set retracted=90 and deployed=100 deg");
+    }
+#endif
+
     while (1) {
         bool sweeping = (step < steps_total);
         servo_cmd_t c;

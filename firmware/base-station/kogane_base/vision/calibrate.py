@@ -16,6 +16,7 @@ Once saved, turn it on with KGN_USE_FLOOR_HOMOGRAPHY=1 and KGN_FLOOR_CALIB=<path
 from __future__ import annotations
 
 import argparse
+import math
 import sys
 
 from ..config import CONFIG
@@ -43,6 +44,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     p = argparse.ArgumentParser(description="Calibrate the room camera's floor homography")
     p.add_argument("--source", choices=["webcam", "video", "mjpeg", "usb"], default="webcam")
     p.add_argument("--camera", type=int, default=0)
+    p.add_argument("--capture-width", type=int, help="match the mapping camera capture width")
+    p.add_argument("--capture-height", type=int, help="match the mapping camera capture height")
+    p.add_argument("--capture-fps", type=float, default=15)
+    p.add_argument("--camera-api", choices=["auto", "dshow", "msmf"], default="auto")
     p.add_argument("--path", help="video file path (--source video)")
     p.add_argument("--url", help="MJPEG stream URL (--source mjpeg)")
     p.add_argument("--out", default=CONFIG.floor_calib_path, help="where to save the JSON")
@@ -63,11 +68,24 @@ def main(argv: list[str] | None = None) -> None:
 
     import cv2
 
-    from .sources import make_source
+    from .sources import FrameSource, make_source
 
     value = {"webcam": str(args.camera), "usb": str(args.camera),
              "video": args.path, "mjpeg": args.url}[args.source]
-    src = make_source(args.source, value)
+    if args.source in ("webcam", "usb") and (
+            args.capture_width is not None or args.capture_height is not None or args.camera_api != "auto"):
+        width = args.capture_width if args.capture_width is not None else 640
+        height = args.capture_height if args.capture_height is not None else 480
+        if width <= 0 or height <= 0 or not math.isfinite(args.capture_fps) or args.capture_fps <= 0:
+            raise ValueError("Camera capture dimensions and FPS must be positive.")
+        backend = {"auto": cv2.CAP_ANY, "dshow": cv2.CAP_DSHOW, "msmf": cv2.CAP_MSMF}[args.camera_api]
+        src = FrameSource(args.camera, backend)
+        src.cap.set(cv2.CAP_PROP_FOURCC, cv2.VideoWriter_fourcc(*"MJPG"))
+        src.cap.set(cv2.CAP_PROP_FRAME_WIDTH, width)
+        src.cap.set(cv2.CAP_PROP_FRAME_HEIGHT, height)
+        src.cap.set(cv2.CAP_PROP_FPS, args.capture_fps)
+    else:
+        src = make_source(args.source, value)
     try:
         frame = next(iter(src))
     except StopIteration:

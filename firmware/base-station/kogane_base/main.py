@@ -26,7 +26,8 @@ from .link.failsafe import Freshness, StalenessMonitor
 from .link.setpoint import compute_setpoint, SETPOINT_MSG
 from .net.sink import EndpointSink
 from .net.udp import UdpEndpoint
-from .protocol import (CtrlMode, DRONE_STATE_LEN, DS_F_BATT_VALID, DS_F_LINKQ_VALID, Frame,
+from .protocol import (CtrlMode, DRONE_STATE_LEN, DS_F_BATT_VALID, DS_F_LINKQ_VALID,
+                       DS_F_POS_VALID, Frame,
                        MsgType, pack_setpoint, unpack_drone_state)
 from .screen.frames import ReadoutState
 from .screen.renderer import ScreenRenderer
@@ -91,15 +92,14 @@ class BaseStation:
             if len(frame.payload) >= DRONE_STATE_LEN:
                 st = unpack_drone_state(frame.payload[:DRONE_STATE_LEN])
                 if st is not None:
-                    self.drone_xy = (st.x_cm / 100.0, st.y_cm / 100.0)
+                    if st.flags & DS_F_POS_VALID:
+                        self.drone_xy = (st.x_cm / 100.0, st.y_cm / 100.0)
                     # Only for the panel readout, and only when the drone says the field is
                     # real: PROTOCOL.md is explicit that a clear validity bit means "no
                     # data", not a measurement of zero. Showing "LINK 0" when the drone
                     # never claimed to know would be inventing telemetry.
-                    if st.flags & DS_F_LINKQ_VALID:
-                        self._link_q = st.link_q
-                    if st.flags & DS_F_BATT_VALID:
-                        self._batt_mv = st.batt_mv
+                    self._link_q = st.link_q if st.flags & DS_F_LINKQ_VALID else None
+                    self._batt_mv = st.batt_mv if st.flags & DS_F_BATT_VALID else None
             self._drone_addr = addr  # learn the drone's real address
         elif frame.msg_type == MsgType.HEARTBEAT:
             self._drone_addr = addr

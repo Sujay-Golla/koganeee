@@ -9,13 +9,13 @@ CONFIG_ESP_TASK_WDT_EN=y
 CONFIG_ESP_WIFI_ENABLED=y
 # Larger main task stack for bring-up logging
 CONFIG_ESP_MAIN_TASK_STACK_SIZE=6144
-# FT232 is TX/RX/GND only — do not pulse DTR
+# Avoid automatic UART reset while the board's IO0 strap is pulled low.
 CONFIG_ESPTOOLPY_BEFORE_NORESET=y
 
 # ---- Console: native USB (USB-Serial-JTAG), not UART0 ----
-# The module's RXD0 castellation is physically destroyed, so the UART path is
-# not usable for flashing anyway. The board enumerates as VID_303A PID_1001 and
-# flashes + logs over native USB (verified on COM11, full boot log captured).
+# The prior module's RXD0 castellation was destroyed. The replacement's UART
+# continuity is not yet verified. The prior board flashed and logged over native
+# USB on COM11; the replacement is reported as COM13, pending identification.
 #
 # ESP_CONSOLE_UART_DEFAULT / _UART_CUSTOM / _USB_CDC / _NONE are members of the
 # same Kconfig choice as the line below, so selecting USB_SERIAL_JTAG here makes
@@ -32,13 +32,9 @@ CONFIG_ESP_CONSOLE_SECONDARY_NONE=y
 # comment here claimed CONFIG_ESP_CONSOLE_NONE=y was required and that there was
 # no fallback log path — that is no longer true.
 #
-# We still keep the pins assigned to the console, for a different reason:
-# GPIO44 (pad 36, RXD0) is physically dead, so the FC link could transmit MSP
-# but never receive MAVLink. A half-open link is worse than an inert one.
-#
-# The FC link is blocked pending a rework wire from STM32 PA10 to module pad 15
-# (IO3, currently unconnected). After that rework: set CONFIG_KGN_FC_UART_RX=3
-# and CONFIG_KGN_PINS_OWNER_FC_LINK=y. See PINMAP.md.
+# Keep the FC link reserved while the replacement module, GPIO44 continuity,
+# and the bridge firmware are checked separately. A half-open link is worse
+# than an inert one. See PINMAP.md and BRINGUP.md.
 CONFIG_KGN_PINS_OWNER_CONSOLE=y
 
 # ---- Partition table: custom, 3 MB app ----

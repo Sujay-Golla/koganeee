@@ -16,7 +16,7 @@ import pytest
 
 from kogane_base.config import CONFIG
 from kogane_base.main import BaseStation
-from kogane_base.protocol import CtrlMode, MsgType, unpack_setpoint
+from kogane_base.protocol import CtrlMode, DS_F_POS_VALID, MsgType, unpack_setpoint
 from kogane_base.vision.runner import VisionObservation
 
 LOOP_HZ = 30.0
@@ -280,7 +280,7 @@ def test_drone_state_is_parsed_with_the_protocol_helper():
         "main.py should use protocol.unpack_drone_state, not a duplicate struct"
 
     bs = BaseStation()
-    payload = pack_drone_state(150, -250, 100, 900, 11400, 0, 90)
+    payload = pack_drone_state(150, -250, 100, 900, 11400, DS_F_POS_VALID, 90)
     bs._on_frame(Frame(MsgType.DRONE_STATE, 1, 0, payload), ("10.0.0.9", 5005))
     assert bs.drone_xy == pytest.approx((1.5, -2.5))
     assert bs._drone_addr == ("10.0.0.9", 5005)
@@ -291,7 +291,7 @@ def test_oversized_drone_state_payload_still_parses():
     from kogane_base.protocol import Frame, pack_drone_state
 
     bs = BaseStation()
-    payload = pack_drone_state(100, 200, 0, 0, 11000, 0, 90) + b"\xff\xff"
+    payload = pack_drone_state(100, 200, 0, 0, 11000, DS_F_POS_VALID, 90) + b"\xff\xff"
     bs._on_frame(Frame(MsgType.DRONE_STATE, 1, 0, payload), ("10.0.0.9", 5005))
     assert bs.drone_xy == pytest.approx((1.0, 2.0))
 

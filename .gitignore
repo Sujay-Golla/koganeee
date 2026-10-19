@@ -21,6 +21,19 @@ firmware/base-station/base.log
 firmware/base-station/base.err
 firmware/base-station/.pytest_cache/
 firmware/base-station/.pytest-sandbox/
+firmware/base-station/outputs/
+firmware/base-station/models/vosk-model-small-en-us-0.15/
+firmware/base-station/models/vosk-model-small-en-us-0.15.zip
+firmware/base-station/models/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20/
+firmware/base-station/models/sherpa-onnx-kws-zipformer-zh-en-3M-2025-12-20.tar.bz2
+firmware/base-station/models/kokoro-v1.0/
+firmware/base-station/calib/stereo.json
+firmware/base-station/calib/stereo_room_floor.json
+firmware/base-station/calib/objects_left.json
+firmware/base-station/calib/objects_right.json
+firmware/base-station/calib/wake_pronunciation.json
+firmware/base-station/data/tasks.json
+firmware/base-station/data/.tasks-*.tmp
 
 # --- OS / editor noise ---
 .DS_Store

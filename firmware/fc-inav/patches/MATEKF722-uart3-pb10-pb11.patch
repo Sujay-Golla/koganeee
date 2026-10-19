@@ -1,0 +1,13 @@
+--- a/src/main/target/MATEKF722/target.h
++++ b/src/main/target/MATEKF722/target.h
+@@ -99,8 +99,8 @@
+ #define UART2_TX_PIN            PA2
+ 
+ #define USE_UART3
+-#define UART3_RX_PIN            PC11
+-#define UART3_TX_PIN            PC10
++#define UART3_RX_PIN            PB11
++#define UART3_TX_PIN            PB10
+ 
+ #define USE_UART4
+ #define UART4_RX_PIN            PA1
