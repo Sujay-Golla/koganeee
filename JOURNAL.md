@@ -1,5 +1,70 @@
-# (Draft) Journal for building Kogane
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/614bf696-ff50-4301-af45-970ccfc70b6b" /># Journal for building Kogane
 Total number of hours: 48 (so far)
+
+## Oct 18 - Putting everything together (and crashing out)
+## Hours spent: 18
+- Very tiring, non-stop grind to get it done, but kept running into silly issues
+- First realized that the motors weren't making the chime because I fried the ESC along with the battery yesterday, so was gonna wait for the adaptors from Amazon to arrive but also realized I ordered the wrong ones, so had to beg the same friend to use an ESC they weren't using and solder everything on AGAIN
+- Spent a lot of time on the connector from ESC to FC because I assumed they would be the same for any 4-in-1 ESCs but Speedybee is just annoying and it took me a while to figure out that they have a different pinout (but was too tired and accidentally kept breaking JST connectors, but then tried soldering directly onto the pads but they were too weak and so had to take a hybrid approach and it was barely holding together)
+- On the other hand, for the demo, I was putting everything together mechanically and realized I should've put more effort into the design as nothing fit together easily and I had to hot glue everything
+- Once I had everything together and made sure all of the wiring still worked, I spent some time taking videos early on so that I would have at least some content if the drone doesn't end up flying
+- Then I recorded demo video for voice assistant, it turns out the voice detection is very meh or at least "Kogane" is not obviously very English so I had a hard time recording
+- Then realized I had access to ToF sensor so I wanted to test it out and keep it ready, just to check another box off in terms of overall functionality
+- I ended up hearing the chime from ESC and was the happiest person ever, so then proceeded to reassemble the entire drone from scratch
+- Spent a lot of time testing and struggling to figure out small things, like directions of motor spinning, just because it was so hard to see (I was also pretty tired as it was almost 3 am by then)
+- After radio ARM tests, I finally put on the propellers, charged the battery and stupidly chose to have the bottom half of the shell for demo flight (I completely forgot how drones fly and obviously it was not very well designed so I had practically no lift and the demo ended up being a disaster)
+- Prepared video (realizing I could use the song Delirious from JJK was the best part of the video) and submissions
+
+Too many photos/videos, so here's the Google Photos link: https://photos.app.goo.gl/WWMVJsRcc1EsQZ38A
+
+## Oct 17 - CV
+### Hours spent: 9
+- Was vibecoding and trying different visualization methods (realized I didn't have corner shelves to mount cameras so had to come up with something)
+- First tried stereo vision since it made sense to have 2 cameras close-by, but didn't make much sense for the long term goal of mapping the whole room, so gave up and went back to wide-range mapping with two cameras
+- Figured out LD2450 and actually got it to work with everything else (it was not very fun to mount without specifically designed 3D printed parts)
+- Figured out I couldn't charge my LiPo without an adapter so placed an order, and had only CV to work on while it arrived.
+- In the process, ended up learning how LiPo chargers work! It was cool to see the balance mode and it finally made sense to see the JST connector also coming out of the battery
+- I pushed my LiPo too far and the battery died, so begged a friend to use their LiPo and made a new connector just for it
+- Was able to continue testing and create a voice assistant for a weather app
+
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/edbee132-9d08-4177-a4fa-558b4874ca9d" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/151f4563-112b-4917-aa5a-0f78bcd56a17" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/4e392f39-3054-48b7-9e4d-2aa7e0fe094b" />
+
+
+
+## Oct 16 - ESP32 fix and Radiomaster control
+### Hours spent: 4
+- Spent an hour learning to remove an SMD resistor and then I didn't have to hold SW3 to boot up ESP32 anymore
+- Screen worked (sent cards over WiFi)
+- Figured out that speaker isn't working because of some routing issue I didn't realize (should've paid more attention to datasheets i guess) but spent a lot of time debugging there
+- Figured out how to control Pitch, Roll, Throttle, ARM, etc. through Radiomaster
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/75a41fce-8db2-4b2d-99d2-9cc1d5bf9f34" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/7b499733-6a24-46db-9d0e-5ef2c8009e40" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/0df21dc8-156c-4e50-86cf-608d8ae52db8" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/120190c9-6d22-4f22-9135-f29b71a155aa" />
+
+
+## Oct 15 - Screen and Radiomaster
+### Hours spent: 7
+- A lot of time wasted trying to make JST connectors work for the screen, but something always went wrong so I just used jumper wires
+- Found out that jumper wires fit snugly into JST pins, so I got lucky there
+- The main issue with the display not working was the LED pin not being on high, which was fixed by better connection
+- Learned how ExpressLRS works, used ChatGPT to learn it step by step and get my receiver connected
+- Took a while as I was struggling with the LED indications until I actually started clicking on the links I was given and everything made much more sense than a summary
+
+<img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/dd5226e3-1958-4bc3-b8b8-490786416b8c" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/454f9b4f-798d-492b-8616-634148fad830" />
+
+
+## Oct 10 - WiFi connectivity and camera
+### Hours spent: 2
+- Mostly went into using ChatGPT to create the WiFi network, this time with the home WiFi rather than hotspot
+- While ESP32 booting was painful, I was able to figure out how to get into download mode and which USBs to power cycle with
+- Plugging in the camera only made me realize that the issue was with an LDO that was shorting, but didn't have time to fully debug
+- Made microphone work and transmit on WiFi
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/b0a24287-b973-463d-ba8d-73c0584315ee" />
+<img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/e2810a1b-ec2b-479d-8ef9-449352810809" />
 
 ## Sep 25 - Reflow station for fixing PCB #1 and resoldering USB breakout
 ### Hours spent: 3
