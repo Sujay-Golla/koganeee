@@ -1,19 +1,27 @@
 # PCB notes
 
-The flight-controller source is in [FC/](FC/). The saved design does not include every hand repair. These are known issues from netlist checks and bench tests, not a complete layout audit.
+The flight-controller source is in [FC/](FC/). The physical prototypes include hand repairs that are absent from these files.
 
 ## Fixes for the next revision
 
 | Issue | Fix |
 | --- | --- |
-| **Reversed ESP32 boot:** Currently R22 pulls IO0 down and SW3 drives it high (need to hold it if you want to flash the ESP32), so add a 10 kΩ pull-up and BOOT button to GND. |
-| **Floating ESP32 EN**, also connected to STM32 PB4. | Dedicated pull-up/reset timing; deliberately design any STM32 reset-control interface. Prototype has a hand-added pull-up. |
-| **Native USB not routed** on GPIO19/20 for ESP32. | Proper connector, ESD protection and USB routing |
-| **Speaker disabled:** U11 `SD_MODE` is grounded. | Correct amplifier enable/channel selection. Do not bridge the grounded pin to 3.3 V. |
-| **Battery sensing absent:** PC0 is unconnected. | Dedicated filtered/protected ADC divider and test point |
-| **Power ratings:** specified F1 is 16 V; Q2's VGS can exceed ±8 V. | Review for full 4S/LiHV voltage and transients; redesign source selection/gate protection and verify USB backfeeding. The fuse protects the FC branch, not ESC motor power. |
-| **Connector mismatch and difficult rework.** | Match actual mating parts/pinouts, label pin 1, add test pads, tool clearance and strain relief. |
-| **LCD/camera reset shared with STM32; no LCD MISO.** | Independent peripheral reset/power sequencing. |
-| **Stale labels / firmware assumptions.** | Synchronize pin map, I2S directions, 25 MHz clock, UARTs and motor timer/DMA assignments. Reserve N16R8 PSRAM pins. |
+| R22 pulls ESP32 IO0 down and SW3 drives it high. | Add a 10 kΩ pull-up and a BOOT button to GND. The original circuit required SW3 for normal boot. The working prototype was repaired. |
+| ESP32 EN floats and is connected to STM32 PB4. | Add a dedicated pull-up and reset timing. Design any STM32 reset control explicitly. |
+| ESP32 native USB is not routed. | Route GPIO19/20 to a connector with ESD protection. |
+| U11 speaker amplifier has SD_MODE tied to GND. | Correct the enable and channel-selection circuit. Do not connect the grounded pin directly to 3.3 V. |
+| Battery ADC PC0 is unconnected. | Add a scaled, filtered divider and an accessible test point. |
+| F1 is specified for 16 V and Q2 can exceed its ±8 V VGS rating. | Review the power path for full 4S/LiHV voltage, transients and USB backfeeding. |
+| Connectors do not match some purchased modules. | Choose exact mating parts, label pin 1 and add strain relief and repair access. |
+| LCD and camera reset share the STM32 reset net. LCD MISO is absent. | Add independent peripheral reset and route readback if required. |
+| Some labels and firmware assumptions are stale. | Reconcile I2S directions, UARTs, the 25 MHz clock and motor timer/DMA assignments. Reserve the N16R8 memory pins. |
 
-Details: [firmware setup and hardware notes](../firmware/README.md), [pin map](../firmware/companion-esp32s3/PINMAP.md), [power review](../firmware/fc-inav/POWER_REVIEW.md), [battery sensing](../firmware/fc-inav/BATTERY_SENSE_CHECK.md).
+## Before ordering
+
+- Reconcile BOM values and supplier IDs with the chosen components.
+- Regenerate ERC and DRC. The saved report is historical.
+- Verify the complete ESC harness pinout and every connector's orientation.
+- Add test points for supply rails, reset, boot, UART and ADC signals.
+- Check power selection and intended loads on the assembled revision.
+
+Details are in the [firmware guide](../firmware/README.md), [pin map](../firmware/companion-esp32s3/PINMAP.md), [power review](../firmware/fc-inav/POWER_REVIEW.md) and [battery-sensing notes](../firmware/fc-inav/BATTERY_SENSE_CHECK.md).

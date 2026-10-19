@@ -1,18 +1,30 @@
-# Koganeee 
-(JJK Reference) Flying room voice assistant with a screen  
+# Koganeee
+A flying voice assistant project inspired by Kogane from Jujutsu Kaisen.
 
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/d20a29b4-c97c-421c-a61c-21d18a431f46" />
 
 **Demo video:** https://youtu.be/gkjLtGN1tb8
 
 ## Inspiration
-As a Jujutsu Kaisen fan and an admirer of flying pets, I wanted to make Kogane for my room. The objective of Kogane is to be a person-following flying pet assistant that can communicate with voice and through a retractable screen, sort of like a flying Alexa but friendlier! I also wanted to make drones for a while and it seemed like a cool approach to make Kogane. A use case that I had in mind is when I'm working in my room and my hands are busy and if I need to quickly pull up a tutorial, I would normally have to put things down to find my laptop. Instead with Kogane, I can call for Kogane wherever I am in my room and quickly check for information or pull up a Youtube tutorial from its screen without any physical contact. 
+
+I wanted to combine my interest in drones with a character from Jujutsu Kaisen. The goal is a room assistant that can come to me, answer voice commands and show information on a screen. It would be useful when my hands are busy and I want to check something without reaching for my laptop.
+
+## Current features
+
+- A custom STM32F722 and ESP32-S3 flight controller connects the aircraft electronics.
+- ELRS radio control, motor outputs and radio-loss failsafe passed bench tests.
+- Saying Kogane opens a voice assistant for live weather and daily tasks on the LCD.
+- The laptop handles speech recognition and spoken replies. The onboard microphone also worked in a stationary test.
+- Two webcams detect people and objects. An LD2450 radar supplies human positions for the room dashboard.
+- The onboard VL53L1X measures distance. A servo output was tested separately.
+
+Autonomous following and screen retraction remain future work. Firmware setup and editable pipeline diagrams are in [firmware/README.md](firmware/README.md).
 
 ## Challenges
-I was new to building FCs and drones, so I had to spend a lot of time getting advice from my friends and revising designs. The timeline was also a bit tight as I had to finish it by Open Sauce. There were a lot of errors on the PCB that I had not anticipated, so I had to make a lot of tweaks with soldering. I also made expensive mistakes with batteries and ESCs but eventually made it work.  
 
-## Technical Features
-In terms of the technical features, it is a drone controlled by a room-based camera-mmWave sensor fused navigation system for object and person detection. It has a mic and speaker for voice activation and vocal communication, as well as a retractable screen to present any information prompted by the user. It hosts 1303 Brushless motors, a big 1100mAH 4S LiPo battery, a custom FC with STM32F722RET6 and ESP32-S3-WROOM, and with the option to operate over radio control as needed. 
+This was my first custom flight controller and drone build. PCB errors led to repeated soldering repairs, and I made expensive mistakes with batteries and ESCs. Connector mismatches and parts that did not fit also made assembly harder than expected.
+
+The first flight attempt had inadequate lift with the lower shell fitted. I need to revise that design and check the propulsion setup before another attempt. The [journal](JOURNAL.md) records the build, repairs and tests.
 
 ## Build
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/4e5e76a4-c71b-426d-8ef9-f2421329ba21" />
@@ -49,6 +61,8 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 
 ## BOM
 
+The original parts budget is below. The [CSV BOM](BOM.csv) needs reconciliation with replacement parts, the actual radio setup and shipping costs.
+
 | Item | Qty | Price (USD) | Link | Notes |
 |------|-----|-------------|------|-------|
 | 1303 5500KV brushless motor | 4 | $67.61 | [Rotor Village](https://rotorvillage.ca/geprc-speedx2-1303-5-5500kv-motor/) | |
@@ -56,7 +70,7 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 | 4-in-1 ESC 45A 20x20 | 1 | $30.55 | [AliExpress](https://www.aliexpress.com/item/1005009278492069.html) | |
 | GNB 1100mAh 4S 120C HV LiPo XT60 | 1 | $19.72 | [Rotor Village](https://rotorvillage.ca/gnb-1100mah-4s-120c-hv-lipo-xt60/) | |
 | Battery strap | 1 | $3.88 | [AliExpress](https://www.aliexpress.com/item/4001316238579.html) | |
-| Custom Kogane FC PCB | 1 | $168.84 | [JLCPCB](https://jlcpcb.com) | Design submitted but revisions noted under in the PCB directory|
+| Custom Kogane FC PCB | 1 | $168.84 | [JLCPCB](https://jlcpcb.com) | Revision notes are in the PCB directory.|
 | ESP32-S3-WROOM-1-N16R8 | 1 | $15.79 | [AliExpress](https://www.aliexpress.com/item/1005012502278371.html) | Manual solder |
 | VL53L1X ToF sensor | 1 | $4.83 | [AliExpress](https://www.aliexpress.com/item/1005007324288727.html) | Manual solder |
 | 8GB microSD card | 1 | $3.49 | [AliExpress](https://www.aliexpress.com/item/1005010323860143.html) | FAT32 for iNAV blackbox |
@@ -70,16 +84,20 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 | USB webcam 720p or 1080p | 2 | $7.95 | [AliExpress](https://www.aliexpress.com/item/1005007740023631.html) | Fixed position to laptop USB |
 | 4S LiPo charger with AC plug | 1 | $15.00 | [Amazon](https://www.amazon.ca/dp/B0B3Y3JGDG) | |
 | XT60 Pigtail Male | 1 | $1.48 | [AliExpress](https://www.aliexpress.com/item/1005009156026988.html) | |
-| Radio TX module | 1 | $4.23 | [AliExpress](https://www.aliexpress.com/item/1005010228737836.html) | For future integration as RC transmitter is currently out of budget |
+| Radio TX module | 1 | $4.23 | [AliExpress](https://www.aliexpress.com/item/1005010228737836.html) | Original planned module. The build uses a Pocket and ELRS receiver. |
 | JST Connector kit | 1 | $6.09 | [AliExpress](https://www.aliexpress.com/item/1005010491522001.html) | |
 | M2 nylon standoff kit | 1 | $3.68 | [AliExpress](https://www.aliexpress.com/item/32862529967.html) | |
 | Connectors, adapters, USB extensions | Depends | < $30 | AliExpress | |
 
-**Total cost: $384.47**
+**Listed total: $384.47.**
 
 ## Credits
-https://macondo.hackclub.com/docs/flight-controller#stm32cubemx - Very useful guide :D
-Thanks to Surya and Alvik for all their guidance with the PCB, drone design, and throughout the build!
 
-## Next Steps
-While all the firmware is available, I didn't have time to install and calibrate cameras for full autonomy. Also didn't have time to design a proper mechanism for screen retraction but that could a simple pulley driven by one servo.
+The [Macondo flight-controller guide](https://macondo.hackclub.com/docs/flight-controller#stm32cubemx) helped with the PCB and firmware setup. Thanks to Surya and Alvik for their advice on the electronics, drone design and build.
+
+## Next steps
+
+- Revise the lower shell and verify lift before another flight attempt.
+- Correct the PCB issues listed in [pcb/README.md](pcb/README.md).
+- Design and test a servo-driven screen-retraction mechanism.
+- Calibrate the room cameras and develop autonomous following.

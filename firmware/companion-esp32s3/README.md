@@ -1,73 +1,81 @@
-# KOGANE Companion — ESP32-S3-WROOM-1 (ESP-IDF)
+# ESP32 companion
 
-On-board companion. Bridges the laptop (Wi-Fi UDP) to the F722 flight core, and drives
-the drone payload (audio, display, camera, servo).
+The ESP32-S3-WROOM-1-N16R8 handles Wi-Fi, the LCD, microphone capture, servo PWM and STM32 telemetry. The working prototype has demonstrated these paths on the bench. The onboard camera remains deferred, and the speaker amplifier needs a hardware repair.
 
-## Responsibilities
-| Module | File | Role |
-|--------|------|------|
-| Wi-Fi + UDP | `main/wifi_udp.*` | join Wi-Fi (STA), send/recv `KGN` datagrams to base |
-| FC link | `main/link_fc.*` | parse iNAV **MAVLink** telemetry in; send **MSP** RC override out (UART1) |
-| Audio | `main/audio_i2s.*` | INMP441 mic → base (`AUDIO_MIC`, off by default); base TTS → speaker amp (`AUDIO_TTS`). One I2S controller, full duplex, 16 kHz mono |
-| Display | `main/display_spi.*` | ILI9341 + XPT2046 touch (SPI) |
-| Camera | `main/camera_dvp.*` | OV2640 DVP → MJPEG HTTP stream |
-| Servo | `main/servo_ledc.*` | MG90S screen rollout (LEDC PWM) |
-| Messages | `main/kogane_msg.h` | `KGN` datagram structs (mirror of shared/PROTOCOL.md) |
+## Build and flash
 
-## Build / flash
-```powershell
+Use ESP-IDF 6.1 in its configured Command Prompt. Run from `firmware/companion-esp32s3`.
+
+```bat
 idf.py set-target esp32s3
-idf.py menuconfig      # Kogane -> Wi-Fi SSID/pass, base station IP/port, FC UART, pins
+idf.py menuconfig
 idf.py build
-idf.py -p COM<x> flash monitor
+idf.py -p COM13 flash
+idf.py -p COM13 monitor
 ```
-Requires ESP-IDF v5.x. Camera needs the `esp32-camera` component (add via the IDF
-component manager — see `main/idf_component.yml`).
+
+Run `set-target` only on initial setup. Replace COM13 with the ESP32's native USB Serial/JTAG port. Exit the monitor with **Ctrl+]** before reflashing.
+
+The module has 16 MB flash and 8 MB octal PSRAM. Keep the custom partition table and reserve GPIO35–37 for the module's memory.
+
+## Boot and power
+
+- Download mode needs IO0 low during reset. Normal boot needs IO0 high.
+- The original reversed IO0 strap was repaired on the working board. Older instructions to hold SW3 for normal boot describe the unmodified PCB.
+- The defaults disable automatic pre-flash reset. Enter download mode manually when needed.
+- The LCD, servo and ELRS receiver use the battery-backed 5 V rail. USB alone does not power every peripheral.
+- Check the [PCB notes](../../pcb/README.md) before powering a repaired or unverified board.
+
+## Enable one stage at a time
+
+The default image leaves all staged peripherals off. First verify boot, then enable each required stage in **Kogane Companion → Staged hardware bring-up**.
+
+1. Enable Wi-Fi. Set the local SSID, password, laptop IPv4 and UDP port 5005.
+2. Enable outbound telemetry and check reception on the laptop.
+3. Enable the display and verify the physical panel.
+4. Enable microphone capture with speaker TX and boot tone disabled.
+5. Test servo PWM with the mechanism detached. Disable the boot sweep afterward.
+6. Enable the FC link separately after checking its wiring.
+
+Credentials belong in ignored `sdkconfig`. The [bring-up guide](BRINGUP.md) contains detailed checks and historical repair notes. Use the current boot behavior above when its older switch instructions differ.
+
+## Flight-controller link
+
+Select `KGN_PINS_OWNER_FC_LINK`, enable `KGN_BRINGUP_FC_LINK` and retain `KGN_FC_RX_ONLY=y`.
+
+- STM32 PA9 TX connects to ESP32 GPIO43 RX.
+- ESP32 GPIO44 TX connects to STM32 PA10 RX.
+- Set iNAV UART1 to MAVLink at 115200 with MSP off on that UART.
+- Keep `KGN_FC_REQUEST_TEST` off during normal use.
+
+CRC-checked heartbeat and attitude reception, Wi-Fi forwarding and the bounded parameter-request test passed bench checks. Flight commands remain blocked. See [FC_LINK_CHECK.md](FC_LINK_CHECK.md).
+
+## Payloads and source files
+
+| File | Role |
+| --- | --- |
+| `main/wifi_udp.*` | Connects to Wi-Fi and exchanges KGN datagrams. |
+| `main/link_fc.*` | Receives FC telemetry and gates the bench request test. |
+| `main/display_spi.c` | Writes LCD cards to the ILI9341. |
+| `main/audio_i2s.c` | Captures INMP441 audio at 16 kHz. |
+| `main/servo_ledc.c` | Generates the servo PWM signal. |
+| `main/camera_dvp.c` | Implements the optional OV2640 HTTP stream. |
+| `main/kogane_msg.h` | Defines the companion's message structures. |
+
+[PINMAP.md](PINMAP.md) records the physical connections. The LCD has no routed MISO or touch interface. Its reset is shared with the STM32. U11's grounded `SD_MODE` holds the speaker amplifier off, so the demo uses laptop audio output.
 
 ## Flash layout
 
-Custom partition table (`partitions.csv`, `CONFIG_PARTITION_TABLE_CUSTOM=y`). The
-stock single-app table gave the app 1 MB and the image was already ~83% full
-before the camera driver went in, on a module with 16 MB of flash.
+The custom [partition table](partitions.csv) gives the application 3 MB. NVS and PHY data keep their original offsets. There are no OTA slots or filesystem partition.
 
-| offset | size | name | notes |
-|--------|------|------|-------|
-| `0x000000` | 32 K | — | 2nd stage bootloader |
-| `0x008000` | 4 K | — | partition table |
-| `0x009000` | 24 K | `nvs` | **unmoved** from the stock layout |
-| `0x00f000` | 4 K | `phy_init` | **unmoved** from the stock layout |
-| `0x010000` | **3 M** | `factory` | app — was 1 M |
-| `0x310000` | ~12.9 M | — | unallocated to the end of flash |
+| Partition | Offset | Size |
+| --- | --- | --- |
+| NVS | `0x9000` | 24 KB |
+| PHY data | `0xf000` | 4 KB |
+| Factory app | `0x10000` | 3 MB |
 
-`nvs` and `phy_init` keep their stock offsets *and* sizes, so stored Wi-Fi and PHY
-calibration survive the reflash — only the app grew, and it grew downstream of
-both. One `factory` app, **no OTA slots**: there is no OTA mechanism in this
-firmware and the board is flashed over native USB (the UART RXD0 castellation is
-destroyed, see `PINMAP.md`), so a second slot would cost 3 MB for a path nothing
-can use. **No `storage` partition**: camera frames stream straight out of PSRAM as
-MJPEG and screen tiles are rendered as they land, so there is no file to keep.
-Full rationale is in the comment block in `partitions.csv`.
+## Optional camera server
 
-## Camera HTTP endpoints
+When the camera stage is enabled, the HTTP server provides `/`, `/snapshot` and `/stream` on port 80 by default. It has no authentication or TLS. Keep it on a trusted network. Camera software is present, but operation on the repaired board has not been established.
 
-`camera_dvp.c` serves, on `CONFIG_KGN_CAM_HTTP_PORT` (80):
-
-| path | content | purpose |
-|------|---------|---------|
-| `/stream` | `multipart/x-mixed-replace` MJPEG | the CV feed, `PROTOCOL.md` §3 |
-| `/snapshot` | one `image/jpeg` | cheapest "is the camera alive" check |
-| `/` | HTML status | frame size, quality, fps cap, IP, counters |
-
-> **This server is unauthenticated.** No password, no token, no TLS, and `/stream`
-> is a live camera feed. Anyone who can route to the drone's address can watch it.
-> Fine on an isolated bench network, not fine on a shared one.
-
-## Pins (defaults; set final GPIOs in menuconfig — DESIGN.md §7)
-FC UART1, I2S (mic + speaker), SPI (LCD+touch), DVP (OV2640), LEDC (servo). ESP32-S3
-GPIO assignment is **not yet locked in hardware** — confirm before PCB route, then update
-`Kconfig.projbuild` defaults.
-
-## Status
-All modules are FreeRTOS-task skeletons with `TODO(kogane)` stubs. `app_main` brings up
-Wi-Fi, then starts each task. The control path (UDP setpoint → MSP override) and the
-telemetry path (MAVLink → UDP DRONE_STATE) are wired end-to-end with placeholder logic.
+For the working assistant and mapping commands, use the [demo index](../Demo/INDEX.md).
