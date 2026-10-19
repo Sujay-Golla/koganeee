@@ -1,5 +1,7 @@
 # Handoff — Kogane (2026-09-23)
 
+**Documentation location:** Demo plans and feature runbooks now live in [firmware/Demo](firmware/Demo/INDEX.md). Bare guide filenames in older notes below refer to that folder.
+
 **PROPOSED FIRST-HOVER SITE INDOOR ROOM 2026-10-19:** User answers physical
 site is "a large empty room with high ceilings". Combined with no prior quad
 flight experience, unknown loaded weight and unresolved5500KV/3018/4S margin,
@@ -938,7 +940,7 @@ User wanted stereo depth / ONE person position, not independent camera tracks.
 Cameras are on the **5m wall**, so demo defaults now room-width5, room-depth4;
 40cm centred baseline puts lens references x2.3/2.7. `--camera2` now selects new
 `tools/mapping_stereo.py`; old independent mode only via --independent-cameras.
-Use `STEREO_SETUP.md`, revised DEMO_TODAY section1B, and updated base README.
+Use `firmware/Demo/STEREO_SETUP.md`, revised DEMO_TODAY section1B, and updated base README.
 One left YOLO tracker supplies identity; actual rectified left/right SGBM pixel
 correspondence supplies one torso surface 3D fix. Includes bidirectional disparity
 consistency, texture/support/depth-spread checks, metric depth limits, receipt-time
@@ -995,7 +997,7 @@ camera identification, angles, overlap/empty-room/lens-cover tests and radar ste
 flight if cleared, laptop microphone -> FC LCD for two preset responses, and a
 webcam/person-position map with an optional LD2450 on USB-to-TTL. Webcam goes on
 the monitor near the middle of one wall; radar on the same table facing the room.
-See root `DEMO_TODAY.md` for wiring, commands, calibration and recording steps.
+See root `firmware/Demo/DEMO_TODAY.md` for wiring, commands, calibration and recording steps.
 New standalone `tools/mapping_demo.py` provides webcam boxes, top-down person
 trail, optional read-only 256000-baud radar, MP4+CSV and stale-measurement expiry.
 Camera/radar points are separate; no SLAM/fusion claim. `tools/demo_assistant.py`
@@ -1014,7 +1016,7 @@ remains a stub; standalone demo is implemented. Leave flight-command block on.
 
 **PRIORITY UPDATE 2026-10-17: first-flight plan and power review.** User asked
 for a complete remaining-work, soldering and shopping plan. See root
-`FIRST_FLIGHT_PLAN.md` and `firmware/fc-inav/POWER_REVIEW.md`. User reports
+`firmware/Demo/FIRST_FLIGHT_PLAN.md` and `firmware/fc-inav/POWER_REVIEW.md`. User reports
 having the assembled aircraft, props and charger; total weight is not measured.
 Battery is specifically GNB11004S120AHV 4S LiHV 1100mAh XT60 (Rotor Village
 link), listed mass 122g. No need to buy a duplicate polyfuse: F1 already exists.

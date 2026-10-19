@@ -2,6 +2,8 @@
 
 The STM32 runs flight control; the ESP32 handles Wi-Fi and payloads; the laptop runs voice and room mapping. Manual flight uses ELRS radio control. Autonomous following and voice flight commands are not enabled in the demonstrated setup.
 
+Demo plans, feature runbooks and the shipping checklist are collected in [Demo/INDEX.md](Demo/INDEX.md).
+
 | Directory | Purpose | Tested toolchain |
 | --- | --- | --- |
 | [fc-inav](fc-inav/) | Custom STM32F722 iNAV image, patches and configuration references | iNAV 9.1.0 / Configurator 9.1.1 |
@@ -20,7 +22,7 @@ Remove propellers for flashing and bench checks. USB ports, camera indices and I
 4. Verify `resource` reports UART3 on **PB10 TX / PB11 RX**, motors on PA0–PA3, and healthy gyro/accelerometer in `status`.
 5. Configure UART3 Serial RX, receiver **SERIAL / CRSF**, and verify the radio channels. The tested outputs use **DSHOT300** and `PWM_OUTPUT_ENABLE`. Check actual geometry, orientation, motor order/direction, arm/disarm and radio-loss failsafe before flight.
 
-This PCB has a **25 MHz crystal** and custom peripheral/timer assignments. Do not substitute an online stock MATEKF722 image or paste `config/kogane-fc.diff` as a restore script. `target/KOGANEF722` is unfinished. See [FC setup](fc-inav/README.md) and [flight checks](../FIRST_FLIGHT_PLAN.md).
+This PCB has a **25 MHz crystal** and custom peripheral/timer assignments. Do not substitute an online stock MATEKF722 image or paste `config/kogane-fc.diff` as a restore script. `target/KOGANEF722` is unfinished. See [FC setup](fc-inav/README.md) and [flight checks](Demo/FIRST_FLIGHT_PLAN.md).
 
 Optional onboard ToF: set `rangefinder_hardware = VL53L1X`, save and verify `RANGEFINDER=OK` plus changing readings in Sensors. This does not automatically configure altitude hold.
 
@@ -69,9 +71,9 @@ Skip virtual-environment creation when reusing a working environment. Download *
 
 Replace device **3** and **10.0.0.47** with the actual microphone and ESP32 address. Omit `--host` for laptop preview only. Say **Kogane**, wait for **Listening**, then ask **Show me the weather today**, **Show me my tasks for today**, or **New task buy groceries**. Weather needs internet; recognition, speech and tasks run locally. Press **Q** to exit.
 
-- [Tasks](../TASKS_DEMO.md), [weather](../WEATHER_DEMO.md), [voice/LCD and wake tuning](../VOICE_LCD_DEMO.md), [voice styles](../VOICE_STYLE.md).
-- [Stationary onboard microphone](../BOARD_MIC_TEST.md): optional board audio over Wi-Fi; recognition still runs on the laptop. In-flight noise performance is unverified.
-- [Room mapping](../ROOM_MAPPING_DEMO.md): two webcams for coverage and an LD2450 via USB-UART for human positions. No ESP32-C3 or stereo calibration is required for this mode. [Object mapping](../OBJECT_MAPPING.md) needs floor calibration for approximate furniture positions.
+- [Tasks](Demo/TASKS_DEMO.md), [weather](Demo/WEATHER_DEMO.md), [voice/LCD and wake tuning](Demo/VOICE_LCD_DEMO.md), [voice styles](Demo/VOICE_STYLE.md).
+- [Stationary onboard microphone](Demo/BOARD_MIC_TEST.md): optional board audio over Wi-Fi; recognition still runs on the laptop. In-flight noise performance is unverified.
+- [Room mapping](Demo/ROOM_MAPPING_DEMO.md): two webcams for coverage and an LD2450 via USB-UART for human positions. No ESP32-C3 or stereo calibration is required for this mode. [Object mapping](Demo/OBJECT_MAPPING.md) needs floor calibration for approximate furniture positions.
 
 Models, credentials, calibration, tasks and recordings are local files excluded from Git. A fresh clone needs its own setup. The snapshot passed 741 Python tests and the FC-link C/build checks; first flight and autonomous navigation are not established by those tests.
 

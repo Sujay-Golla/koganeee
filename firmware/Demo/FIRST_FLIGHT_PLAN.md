@@ -53,7 +53,7 @@ approach. The first two stages below determine whether this estimate holds.
 
 **Estimate: 2-4 hours, plus any parts/rework delay. Current priority.**
 
-Read [POWER_REVIEW.md](firmware/fc-inav/POWER_REVIEW.md) first. The FC already
+Read [POWER_REVIEW.md](../fc-inav/POWER_REVIEW.md) first. The FC already
 has F1, D4 and regulator protection; these are not missing items to buy.
 
 - [ ] Confirm installed F1 and Q2 against the saved PCB/BOM and repair history.
@@ -126,7 +126,7 @@ this check establishes a need.
 
 **Pass:** pack measurement agrees with the meter across more than one actual
 voltage, including battery-only power. Analog current measurement is explicitly
-unavailable after repurposing CURR. See [BATTERY_SENSE_CHECK.md](firmware/fc-inav/BATTERY_SENSE_CHECK.md).
+unavailable after repurposing CURR. See [BATTERY_SENSE_CHECK.md](../fc-inav/BATTERY_SENSE_CHECK.md).
 
 ## 4. Confirm sensors and configure the manual flight controls
 
@@ -246,7 +246,7 @@ whole aircraft. A smoke stopper is bench equipment and is not installed for flig
 
 ## References
 
-- [Power component review](firmware/fc-inav/POWER_REVIEW.md)
+- [Power component review](../fc-inav/POWER_REVIEW.md)
 - [GEPRC motor specifications](https://geprc.com/product/geprc-speedx2-1303-5-3800kv-5500kv-motor/)
 - [User's GNB battery listing](https://rotorvillage.ca/gnb-1100mah-4s-120c-hv-lipo-xt60/)
 - [iNAV failsafe behavior](https://github.com/iNavFlight/inav/blob/9.1.0/docs/Failsafe.md)

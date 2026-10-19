@@ -35,6 +35,9 @@ firmware/base-station/calib/wake_pronunciation.json
 firmware/base-station/data/tasks.json
 firmware/base-station/data/.tasks-*.tmp
 
+# Local writing drafts; publish only reviewed, user-authored documentation.
+firmware/Demo/drafts/
+
 # --- OS / editor noise ---
 .DS_Store
 Thumbs.db
