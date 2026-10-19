@@ -80,7 +80,7 @@ flowchart TB
     ESC --> MOTORS["Four motors"]
     FC -->|"MAVLink"| ESP["ESP32 companion"]
     ESP -->|"Wi-Fi"| MONITOR["Laptop telemetry"]
-    ESP -.->|"Bench test"| SERVO["Servo"]
+    ESP -.->|"PWM"| SERVO["Servo"]
 ```
 
 ## STM32 flight controller
