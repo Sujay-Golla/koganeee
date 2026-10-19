@@ -14,51 +14,82 @@ Demo plans, feature runbooks and the shipping checklist are collected in [Demo/I
 
 ## System pipeline
 
-This diagram is editable Mermaid source. Edit the code block in this README to add nodes or connections; paste it into [Mermaid Live Editor](https://mermaid.live/) for a visual preview. Solid arrows show implemented data paths; dashed arrows are labelled optional or planned. The paths summarize capabilities tested across the prototypes, rather than a single fully integrated flying demo.
+Voice and mapping run on the laptop. The radio controls flight. Edit the Mermaid blocks below to change the diagrams; dashed lines mark optional paths.
+
+### Voice assistant
 
 ```mermaid
+---
+config:
+  htmlLabels: false
+  flowchart:
+    padding: 24
+    minNodeWidth: 170
+    wrappingWidth: 260
+    nodeSpacing: 35
+    rankSpacing: 45
+---
 flowchart TB
-    %% Edit the quoted labels; use unique IDs when adding nodes.
-    subgraph voice["Voice assistant - laptop"]
-        MIC["Laptop microphone"] --> AUDIO["Audio conditioning + Vosk<br/>Kogane wake word and speech recognition"]
-        AUDIO --> APPS["Command handlers<br/>Daily tasks + weather + LCD cards"]
-        APPS --> SPEECH["Local Kokoro speech<br/>Laptop speaker"]
-        APPS <--> TASKS[("Local task storage")]
-    end
-
-    WEATHER["Open-Meteo<br/>Geocoding + forecast HTTPS APIs"] <--> APPS
-
-    subgraph mapping["Room mapping - laptop"]
-        CAMERAS["Two USB webcams"] --> VISION["OpenCV + YOLOv8n + ByteTrack<br/>Per-camera detections and tracks"]
-        RADAR["LD2450 via USB-UART"] --> POSITION["Serial parser + room transform<br/>Kalman position smoothing"]
-        POSITION -->|"Human position and trail"| MAP["Live room dashboard"]
-        VISION -->|"Camera views and boxes"| MAP
-        VISION -.->|"Optional; needs floor calibration"| FLOOR["Floor homography<br/>Approximate furniture positions"]
-        FLOOR -.-> MAP
-        MAP --> RECORD["MP4 recording + CSV measurements"]
-    end
-
-    subgraph aircraft["Aircraft electronics"]
-        SENSORS["IMU + optional VL53L1X ToF"] --> FC["STM32F722 / custom iNAV<br/>Stabilization + RC failsafe"]
-        FC -->|"DShot300"| ESC["4-in-1 ESC"]
-        ESC --> MOTORS["Four motors"]
-        FC -->|"MAVLink UART1 / 115200"| ESP["ESP32-S3 companion"]
-        ESP -->|"SPI"| LCD["ILI9341 LCD"]
-        BOARDMIC["INMP441 microphone"] -.->|"Optional I2S input"| ESP
-        ESP -.->|"Optional bench PWM"| SERVO["Servo"]
-    end
-
-    RADIO["RadioMaster Pocket + ELRS receiver"] -->|"CRSF / UART3"| FC
-    APPS -->|"Wi-Fi UDP / KGN screen frames"| ESP
-    ESP -.->|"Optional Wi-Fi microphone stream"| AUDIO
-    ESP -->|"Wi-Fi UDP / heartbeat + FC state"| MONITOR["Laptop telemetry monitor"]
-
-    %% This branch is a future goal, not an enabled flight-control path.
-    MAP -.->|"Planned"| FOLLOW["Autonomous following controller<br/>Not implemented in the demo"]
-    FOLLOW -.->|"Planned control path; currently blocked"| FC
+    MIC["Laptop microphone"] --> VOSK["Vosk speech recognition"]
+    BOARDMIC["ESP32 microphone"] -.->|"Wi-Fi"| VOSK
+    VOSK --> APPS["Weather and tasks"]
+    WEATHER["Open-Meteo API"] <--> APPS
+    APPS --> TTS["Kokoro speech"]
+    TTS --> SPEAKER["Laptop speaker"]
+    APPS -->|"Wi-Fi"| DISPLAY["ESP32 and LCD"]
 ```
 
-Radar supplies human coordinates in the current mapping mode; camera tracks are independent between views. Furniture positions need separate floor calibration. Onboard camera streaming, the onboard speaker and the screen-retraction mechanism are outside the demonstrated pipeline. The companion's normal FC link remains receive-only; its separate bounded read-request bench test does not enable flight commands.
+Vosk handles the wake word and commands. Tasks are stored locally; weather is fetched online.
+
+### Room mapping
+
+```mermaid
+---
+config:
+  htmlLabels: false
+  flowchart:
+    padding: 24
+    minNodeWidth: 170
+    wrappingWidth: 260
+    nodeSpacing: 35
+    rankSpacing: 45
+---
+flowchart TB
+    CAMERAS["Two webcams"] --> VISION["YOLOv8n and ByteTrack"]
+    RADAR["LD2450 radar"] --> POSITION["Kalman position filter"]
+    VISION -->|"Detections"| MAP["Room dashboard"]
+    POSITION -->|"Human position"| MAP
+    VISION -.-> FLOOR["Floor calibration"]
+    FLOOR -.->|"Object positions"| MAP
+    MAP --> RECORD["MP4 and CSV export"]
+```
+
+Radar supplies human positions. The cameras detect people and furniture; placing furniture on the map requires floor calibration.
+
+### Flight control and telemetry
+
+```mermaid
+---
+config:
+  htmlLabels: false
+  flowchart:
+    padding: 24
+    minNodeWidth: 170
+    wrappingWidth: 260
+    nodeSpacing: 35
+    rankSpacing: 45
+---
+flowchart TB
+    RADIO["Pocket and ELRS receiver"] -->|"CRSF"| FC["STM32 running iNAV"]
+    SENSORS["IMU and ToF"] --> FC
+    FC -->|"DShot300"| ESC["4-in-1 ESC"]
+    ESC --> MOTORS["Four motors"]
+    FC -->|"MAVLink"| ESP["ESP32 companion"]
+    ESP -->|"Wi-Fi"| MONITOR["Laptop telemetry"]
+    ESP -.->|"Bench test"| SERVO["Servo"]
+```
+
+The ESP32 receives flight-controller telemetry; flight commands remain blocked. Autonomous following, onboard camera output and screen retraction are future work. The onboard speaker needs a hardware repair.
 
 Remove propellers for flashing and bench checks. USB ports, camera indices and IP addresses below are examples; use the devices actually connected. The physical prototypes include repairs not reflected in the saved PCB.
 
