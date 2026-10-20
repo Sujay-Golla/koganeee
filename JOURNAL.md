@@ -35,8 +35,8 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 
 ## Oct 16 - ESP32 fix and Radiomaster control
 ### Hours spent: 4
-- Spent an hour learning to remove an SMD resistor and then I didn't have to hold SW3 to boot up ESP32 anymore
-- Screen worked (sent cards over WiFi)
+- Spent an hour learning to remove an SMD resistor and then I didn't have to hold SW3 to boot up ESP32 anymore (also had to do some sketchy soldering of a through-hole resistor from one capacitor pad to the empty copper pad on the PCB, which was somehow actually a solid connection!)
+- Screen worked (sent cards over WiFi from laptop)
 - Figured out that speaker isn't working because of some routing issue I didn't realize (should've paid more attention to datasheets i guess) but spent a lot of time debugging there
 - Figured out how to control Pitch, Roll, Throttle, ARM, etc. through Radiomaster
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/75a41fce-8db2-4b2d-99d2-9cc1d5bf9f34" />
@@ -51,6 +51,7 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 - Found out that jumper wires fit snugly into JST pins, so I got lucky there
 - The main issue with the display not working was the LED pin not being on high, which was fixed by better connection
 - Learned how ExpressLRS works, used ChatGPT to learn it step by step and get my receiver connected
+- Also got familiar with CRSF protocols, which was an interesting learning experience on top of the painful work of debugging
 - Took a while as I was struggling with the LED indications until I actually started clicking on the links I was given and everything made much more sense than a summary
 
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/dd5226e3-1958-4bc3-b8b8-490786416b8c" />
@@ -60,26 +61,27 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 ## Oct 10 - WiFi connectivity and camera
 ### Hours spent: 2
 - Mostly went into using ChatGPT to create the WiFi network, this time with the home WiFi rather than hotspot
+- I learned quite a bit watching AI cook up UDP protocols and ESP-IDF code, and though I wasn't working on it directly, I found it very interesting and tried to interrogate and learn more
 - While ESP32 booting was painful, I was able to figure out how to get into download mode and which USBs to power cycle with
-- Plugging in the camera only made me realize that the issue was with an LDO that was shorting, but didn't have time to fully debug
-- Made microphone work and transmit on WiFi
+- Plugging in the camera only made me realize that the issue was with an LDO that was shorting, but didn't have time to fully debug (with more time, I could've checked if the issue was on the board or with the camera, especially as it looked suspicious near the connectors)
+- Made microphone work and transmit over WiFi
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/b0a24287-b973-463d-ba8d-73c0584315ee" />
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/e2810a1b-ec2b-479d-8ef9-449352810809" />
 
 ## Sep 25 - Reflow station for fixing PCB #1 and resoldering USB breakout
 ### Hours spent: 3
 - A friend bought a ESP32 module for me to fix up PCB #1
-- Used reflow station to replace module
+- Used reflow station to replace module (same friend basically did it for me)
 <img width="4000" height="3000" alt="image" src="https://github.com/user-attachments/assets/f015be2f-1cbf-4327-8325-9474d3c3cc4f" />
 <img width="1319" height="994" alt="image" src="https://github.com/user-attachments/assets/47a29aed-0fd9-407c-852e-47d5a33cb7f9" />
-- Attached USB breakout directly
+- Attached USB breakout directly rather than tack soldering, the connection ended up being much stronger and most importantly, no shorts!
 <img width="4000" height="3000" alt="image" src="https://github.com/user-attachments/assets/9ddf1894-f564-42a9-90fb-a35b95c7e838" />
 
 ## Sep 23 - Unsoldering and trying to clear shorts near RX/TX
 ### Hours spent: 3
 - Realized one of the issues was that speaker area was heating up a lot, realized there were shorts all over the pins on the right side of the FC due to the bad soldering practices for RX/TX
 - Unsoldered TTL wires, tried to clear out the extra solder with flux, wick, soldering iron, etc.
-- Damaged those pads and ruined RX/TX connection AGAIN (Currently nothing works)
+- Damaged those pads and ruined RX/TX connection AGAIN (Currently nothing works and everything is cooked T-T)
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/9e373c55-95b3-44b5-9d27-db4e044f8d6f" />
 
 ## Sep 22 - Fixing broken uart connection, Soldering USB, Flashing ESP32, Setting up peripherals and firmware 
@@ -91,19 +93,19 @@ Too many photos/videos, so here's the Google Photos link: https://photos.app.goo
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/062bc7d7-d1d1-48d0-ac74-db2e005b8006" />
 - Spent a few hours letting Claude setup codebase while I was making individual connectors for all of the peripherals because I was not paying attention to the type of connectors given by devices and designed FC incorrectly (and some just needed longer wires)
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/80b4f187-b97f-499e-b58a-41610a2865ed" />
-- None of the peripherals worked but Wifi data packets were received (realized I need to connect battery for it to work)
+- None of the peripherals worked but Wifi data packets were received over hotstop as I initially thought it would be easiest to setup
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/8fd742dd-c55f-493e-9b74-fc7264ce5293" />
 - Camera stream was supposed to work didn't seem to work
 
 ## Sep 21 - Flashing ESP32
 ### Hours spent: 5
 - Gave up on TTL connector, instead tried USB breakout and it didnt work either but retried UART and that worked
-- Realized I needed resistor for enable, so brought it from MyFab and soldered it
-- Many hours of holding SW1 and SW3 and debugging with Claude, it finally flashed
+- Realized I needed resistor for enable, so brought it from (UofT) MyFab and soldered it
+- Many hours of holding SW1 and SW3 and debugging with Claude, it finally flashed (I zoned out from just holding the buttons, I will look at the exact issue and code later)
 
 https://photos.app.goo.gl/La4t4pvfmcqCWJV5A
 
-## Sep 16 - AliExpress iron incident
+## Sep 16 - AliExpress soldering iron incident
 ### Hours spent: 2
 - Unpacked and tried to use soldering iron
 - Didn't work most of the time so played around with adjusting tip
@@ -117,7 +119,7 @@ https://photos.app.goo.gl/rh5TJYfxsHFoqtMu5
 ### Hours spent: 2
 - Tried resoldering with leaded solder and better flux more neatly
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/d40cc77d-8bf8-46d4-95c4-e5ce757575db" />
-- Tried checking for continuity and still failed
+- Tried checking for continuity and still failed, not sure where the issue lies
 - Ordered a new soldering iron and my own equipment on AliExpress
 
 ## Aug 27 - 2 soldering attempts, USB to STL soldering, ESP installation with WSL
@@ -142,22 +144,22 @@ https://photos.app.goo.gl/5kp8YR52DHTmUaiz7
 ### Hours spent: 3
 <img width="1495" height="1325" alt="image" src="https://github.com/user-attachments/assets/a6baf7be-3887-45f9-b285-a682666599b6" />
 
-- Used flux to fix up some soldering joints for motors
+- Used flux to fix up some soldering joints for motors (falling in love with flux already)
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/5c0c98ca-3e2b-4af2-b5a0-844c5624aa29" />
 
-- Resoldered with XT30 connectors
+- Resoldered with XT30 connectors (it gets more manageable with more tries)
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/bb6d90d0-93dd-4294-8473-960fac5bd229" />
 
 - Resoldered the wires from ESC to FC, this time with flux and in antiparallel direction to avoid unwanted stresses
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/9147eace-48c8-4cc1-b04f-3f588f9cb5d5" />
 
-- Fixed up microphone with wick, flux and solder
+- Fixed up microphone with wick, flux and solder (realized I needed a lot more practice with wick ;-;)
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/8604e2f7-84b4-4865-b5c5-5b0cff65f2fd" />
 
 
 ## Aug 18 - ESC to PCB
 ### Hours spent: 3
-- Spent a while figuring out the best course of action. First started off with the thin wire and tryied crimping and connecting, but it did not work as I expected
+- Spent a while figuring out the best course of action. First started off with the thin wire and tried crimping and connecting, but it did not work as I expected
 - Then I cut pieces of thicker wire and tried soldering the thin wire to the thick wire
 - I HAD NO FLUX OR HELPING HANDS SO I WAS DOING IT BY BRUTE FORCE (had to solder wires so they go in the same direction rather than antiparallel
 - Eventually got to electrical tape and make it survive
@@ -167,12 +169,13 @@ https://photos.app.goo.gl/5kp8YR52DHTmUaiz7
 ## Aug 14 - Soldering ESC
 ### Hours spent: 2
 - Ordered XT30 connectors since those are the oens used by my battery and then unsoldered and resoldered it, along with the capacitor
+- Learned that it is not easy to solder those without a proper tip because heat transfer just sucks
 <img width="1759" height="1325" alt="image" src="https://github.com/user-attachments/assets/3649cff0-75f6-4411-9c6a-bb7f62cd849d" />
 
 - I did not have desoldering equipment nor flux so it was brute forced, luckily I had a solid ESC that survived all that heat
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/431c6fb6-9e1a-481c-8a13-cffef3f2b547" />
 
-- Tried soldering microphone but ruined it by due to very small copper pads
+- Tried soldering microphone but ruined it due to very small copper pads
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/abb535d5-f108-47b9-b631-72064fa83f36" />
 
 
