@@ -4,10 +4,10 @@ Item Name,Qty,Price (total USD),Item Link,Notes
 4-in-1 ESC 45A 20x20,1,$30.55,https://www.aliexpress.com/item/1005009278492069.html,
 GNB 1100mAh 4S 120C HV LiPo XT60,1,$19.72,https://rotorvillage.ca/gnb-1100mah-4s-120c-hv-lipo-xt60/,
 Battery strap,1,$3.88,https://www.aliexpress.com/item/4001316238579.html,
-Custom Kogane FC PCB,1,$168.84,https://jlcpcb.com,Design submitted
-ESP32-S3-WROOM-1-N16R8,1,$15.79,https://www.aliexpress.com/item/1005012502278371.html,Manual solder
-VL53L1X ToF sensor,1,$4.83,https://www.aliexpress.com/item/1005007324288727.html,Manual solder
-8GB microSD card,1,$3.49,https://www.aliexpress.com/item/1005010323860143.html,FAT32 for iNAV blackbox
+Custom Kogane FC PCB,2,$168.84,https://jlcpcb.com,Design submitted (min. 2 assembled PCBs)
+ESP32-S3-WROOM-1-N16R8,1,$15.79,https://www.aliexpress.com/item/1005012502278371.html,
+VL53L1X ToF sensor,1,$4.83,https://www.aliexpress.com/item/1005007324288727.html,
+8GB microSD card,1,$3.49,https://www.aliexpress.com/item/1005010323860143.html,FAT32 for iNAV blackbox (optional)
 OV2640 FPC camera module 75MM-160 650nm,1,$9.19,https://www.aliexpress.com/item/1005003040149873.html,
 ILI9341 2.8 inch SPI touch display,1,$5.69,https://www.aliexpress.com/item/1005006315533240.html,
 INMP441 I2S microphone,1,$1.59,https://www.aliexpress.com/item/1005009213592784.html,
@@ -18,6 +18,8 @@ USB-UART adapter 3.3V logic,1,$1.77,https://www.aliexpress.com/item/100500644546
 USB webcam 720p or 1080p,2,$7.95,https://www.aliexpress.com/item/1005007740023631.html,Fixed position to laptop USB
 4S LiPo charger with AC plug,1,$15.00,https://www.amazon.ca/dp/B0B3Y3JGDG,
 XT60 Pigtail Male,1,$1.48,https://www.aliexpress.com/item/1005009156026988.html,
-Radio TX module,1,$4.23,https://www.aliexpress.com/item/1005010228737836.html,For future integration as RC transmitter is currently out of budget
+Radio TX module,1,$4.23,https://www.aliexpress.com/item/1005010228737836.html,
 JST Connector kit,1,$6.09,https://www.aliexpress.com/item/1005010491522001.html,
 M2 nylon standoff kit,1,$3.68,https://www.aliexpress.com/item/32862529967.html,
+Connectors adapters USB extensions,Depends,$30,,
+Radiomaster Pocket,1,$96.51,https://www.amazon.ca/Radiomaster-Transmitter-Portable-Charcoal-transmitter/dp/B0GWPZ96C5?source=ps-sl-shoppingads-lpcontext&th=1,Or borrow from a friend like I did for testing
