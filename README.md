@@ -56,7 +56,7 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 | 4-in-1 ESC 45A 20x20 | 1 | $30.55 | [AliExpress](https://www.aliexpress.com/item/1005009278492069.html) | |
 | GNB 1100mAh 4S 120C HV LiPo XT60 | 1 | $19.72 | [Rotor Village](https://rotorvillage.ca/gnb-1100mah-4s-120c-hv-lipo-xt60/) | |
 | Battery strap | 1 | $3.88 | [AliExpress](https://www.aliexpress.com/item/4001316238579.html) | |
-| Custom Kogane FC PCB | 1 | $168.84 | [JLCPCB](https://jlcpcb.com) | Design submitted but revisions noted under in the PCB directory|
+| Custom Kogane FC PCB | 2 | $168.84 | [JLCPCB](https://jlcpcb.com) | Design submitted but revisions noted under in the PCB directory (min 2 assembled PCBs) |
 | ESP32-S3-WROOM-1-N16R8 | 1 | $15.79 | [AliExpress](https://www.aliexpress.com/item/1005012502278371.html) | Manual solder |
 | VL53L1X ToF sensor | 1 | $4.83 | [AliExpress](https://www.aliexpress.com/item/1005007324288727.html) | Manual solder |
 | 8GB microSD card | 1 | $3.49 | [AliExpress](https://www.aliexpress.com/item/1005010323860143.html) | FAT32 for iNAV blackbox |
@@ -74,8 +74,9 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 | JST Connector kit | 1 | $6.09 | [AliExpress](https://www.aliexpress.com/item/1005010491522001.html) | |
 | M2 nylon standoff kit | 1 | $3.68 | [AliExpress](https://www.aliexpress.com/item/32862529967.html) | |
 | Connectors, adapters, USB extensions | Depends | < $30 | AliExpress | |
+| Radiomaster Pocket | 1 | $96.51 | [Amazon](https://www.amazon.ca/Radiomaster-Transmitter-Portable-Charcoal-transmitter/dp/B0GWPZ96C5?source=ps-sl-shoppingads-lpcontext&th=1) | Or borrow from a friend like I did for testing |
 
-**Total cost: $384.47**
+**Total cost (upper bound): $510.98**
 
 ## Credits
 https://macondo.hackclub.com/docs/flight-controller#stm32cubemx - Very useful guide :D
