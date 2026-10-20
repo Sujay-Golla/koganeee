@@ -80,6 +80,7 @@ In terms of the technical features, it is a drone controlled by a room-based cam
 ## Credits
 https://macondo.hackclub.com/docs/flight-controller#stm32cubemx - Very useful guide :D
 Thanks to Surya and Alvik for all their guidance with the PCB, drone design, and throughout the build!
+Used ChatGPT and various Claude models throughout the design and build process. Only used them for documentation for draft and format generation, I've looked through and edited all of them to keep them consistent with my understanding of the project, so that it is more readable for other people trying to recreate it.
 
 ## Next Steps
 While all the firmware is available, I didn't have time to install and calibrate cameras for full autonomy. Also didn't have time to design a proper mechanism for screen retraction but that could a simple pulley driven by one servo.
