@@ -14,6 +14,15 @@ I was new to building FCs and drones, so I had to spend a lot of time getting ad
 ## Technical Features
 In terms of the technical features, it is a drone that can be radio controlled, but ready to be implemented with a room-based camera-mmWave sensor fused navigation system for object and person detection, currently displayed in a dashboard for demo. Koganeee also has a mic and LCD screen for the built-in voice assistant with a live Weather app and a Tasks app. It hosts 1303 Brushless motors, a big 1100mAH 4S LiPo battery, and a custom FC with STM32F722RET6 and ESP32-S3-WROOM. Flight computation with accelerometer and ToF sensor is done on-board with the STM32, and is complemented by the ESP32 for data transmission, whether it be directions for autonomous tracking or for cards to be displayed on the screen. 
 
+## Guide to recreating your very own Koganeee!
+
+1. **Start with a revised BOM:** Start off with my [BOM.csv](BOM.csv), check connector compatibility for different modules, and make a good plan for making reliable harnesses
+2. **3D Print your Koganeee:** The [CAD folder](cad/) contains the assembly for the shell and drone design, feel free to change the frame type and revise the shell as needed, taking into account some of the notes I added under [CAD notes](cad/README.md) regarding shell assembly, total weight and propeller-clearance.
+3. **The flight controller:** Review the [PCB notes](pcb/README.md) and make adjustments to the PCB before ordering it, it's definitely also possible to make it more compact with smaller connectors and better planning, so plan for space optimization!
+4. **Set up the firmware.** Follow the [firmware guide](firmware/README.md) for the toolchains and setup order, most of the details for the firmware setup as well as the firmware files are already available and can easily be modified! 
+5. **Test in stages:** The [demo guides](firmware/Demo/INDEX.md) cover voice commands, the LCD, microphone, weather, tasks and room mapping, so check those out and ask your favorite AI (I prefer Sol or Gemini) for any clarifications
+6. **Go through tests for a safe flight:** Follow the [flight preparation guide](firmware/Demo/FIRST_FLIGHT_PLAN.md), verifying the orientation, radio control and failsafe with propellers off, and as well as the physical connections, especially harnesses and soldered joints
+
 ## Build
 <img width="998" height="1325" alt="image" src="https://github.com/user-attachments/assets/4e5e76a4-c71b-426d-8ef9-f2421329ba21" />
 <img width="1843" height="1325" alt="image" src="https://github.com/user-attachments/assets/94a2e731-6f5b-4639-9843-79fbc698d9af" />
