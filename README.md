@@ -50,6 +50,7 @@ In terms of the technical features, it is a drone that can be radio controlled, 
 <img width="1391" height="1060" alt="image" src="https://github.com/user-attachments/assets/3f2907a1-f4bd-4cfd-a7f8-639a140dbec5" />
 
 ### PCB Design
+[![View PCB on KiCanvas](https://hack.club/pcb-badge)](https://kicanvas.org/?repo=https://github.com/Sujay-Golla/koganeee/tree/main/pcb)
 <img width="899" height="1078" alt="image" src="https://github.com/user-attachments/assets/e341f406-db60-47e1-9b0b-7e8a7cd45e3c" />
 
 ### 3D Model
