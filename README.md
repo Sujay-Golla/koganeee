@@ -82,10 +82,11 @@ In terms of the technical features, it is a drone that can be radio controlled, 
 | Radio TX module | 1 | $4.23 | [AliExpress](https://www.aliexpress.com/item/1005010228737836.html) | For future integration as RC transmitter is currently out of budget |
 | JST Connector kit | 1 | $6.09 | [AliExpress](https://www.aliexpress.com/item/1005010491522001.html) | |
 | M2 nylon standoff kit | 1 | $3.68 | [AliExpress](https://www.aliexpress.com/item/32862529967.html) | |
+| Filament (PLA for shell and PETG GF for drone frame) | 2 | $28.68 | [Amazon](https://a.co/d/04z5qBoh) [Amazon](https://a.co/d/00EyYI3x) | doesn't require that much filament, so smaller spools is okay! |
 | Connectors, adapters, USB extensions | Depends | < $30 | AliExpress | |
 | Radiomaster Pocket | 1 | $96.51 | [Amazon](https://www.amazon.ca/Radiomaster-Transmitter-Portable-Charcoal-transmitter/dp/B0GWPZ96C5?source=ps-sl-shoppingads-lpcontext&th=1) | Or borrow from a friend like I did for testing |
 
-**Total cost (upper bound): $510.98**
+**Total cost (upper bound): $539.66**
 
 ## Credits
 https://macondo.hackclub.com/docs/flight-controller#stm32cubemx - Very useful guide :D
